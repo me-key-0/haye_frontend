@@ -1,9 +1,9 @@
-import Events from "../components/Events.component"
+
 
 function EventsPage() {
   return (
-    <div>
-      <Events />
+    <div className="pt-20">
+      Evnets
     </div>
   )
 }

@@ -1,22 +1,22 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-const CustomButton = ({ children, isGoogleSignIn, inverted, ...otherProps }) => (
-    <button
-        className={`custom-button 
-                    ${inverted ? 'bg-white text-black border border-black' : 'bg-black text-white'}
-                    ${isGoogleSignIn ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}
-                    px-4 py-2 rounded`}
-        {...otherProps}
-    >
-        {children}
-    </button>
-);
+const CustomButton = ({ type = 'button', onClick, className, children }) => {
+    return (
+        <button
+            type={type}
+            onClick={onClick}
+            className={`inline-flex items-center justify-center px-4 py-2 text-base font-semibold text-white transition-all duration-200 rounded-md focus:outline-none ${className}`}
+        >
+            {children}
+        </button>
+    );
+};
 
 CustomButton.propTypes = {
-    children: PropTypes.node.isRequired,
-    isGoogleSignIn: PropTypes.bool,
-    inverted: PropTypes.bool,
-    otherProps: PropTypes.object
+    type: PropTypes.string,
+    onClick: PropTypes.func,
+    className: PropTypes.string,
+    children: PropTypes.node.isRequired
 };
 
 export default CustomButton;

@@ -13,7 +13,7 @@ class TrendingPlaces extends React.Component {
 render() {
   return (
     <div>
-        <h3>Upcoming Events</h3>
+        <h3 className="text-xl font-bold mb-4" >Upcoming Events</h3>
         {events.map(event => (
           <div key={event.id}>{event.name}</div>
         ))}

@@ -1,30 +1,36 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-const FormInput = ({ handleChange, label, ...otherProps }) => (
-    <div className="group mb-6 relative">
-        <input
-            className="form-input bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-            onChange={handleChange}
-            {...otherProps}
-        />
-        {label ? (
-            <label
-                className={`form-input-label absolute left-0 top-0 px-4 py-2 pointer-events-none transition-all duration-300 ease-in-out ${
-                    otherProps.value.length ? 'transform -translate-y-6 scale-75 text-purple-500' : 'text-gray-500'
-                }`}
-            >
-                {label}
+const FormInput = ({ type = 'text', name, id, placeholder, value, onChange, required = false, className }) => {
+    return (
+        <div>
+            <label htmlFor={id} className="text-base font-medium text-gray-900">
+                {placeholder}
             </label>
-        ) : null}
-    </div>
-);
+            <div className="mt-2.5">
+                <input
+                    type={type}
+                    name={name}
+                    id={id}
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
+                    required={required}
+                    className={`block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600 ${className}`}
+                />
+            </div>
+        </div>
+    );
+};
 
 FormInput.propTypes = {
-    handleChange: PropTypes.func.isRequired,
-    label: PropTypes.string,
-    otherProps: PropTypes.shape({
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    }).isRequired,
+    type: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    placeholder: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    required: PropTypes.bool,
+    className: PropTypes.string
 };
 
 export default FormInput;
