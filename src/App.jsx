@@ -11,6 +11,7 @@ import SignIn from './pages/SignIn.page';
 import SignUp from './pages/SignUp.page';
 import Header from './components/Header.component';
 import { setCurrentUser } from "./redux/user/user.actions";
+import ContactUs from './pages/ContactUs.page';
 
 const App = ({ currentUser}) => {
   return (
@@ -26,7 +27,7 @@ const App = ({ currentUser}) => {
           path="/signin" 
           element={currentUser ? <Navigate to="/" /> : <SignIn />} 
         />
-        {/* Uncomment when PlaceDetails component is available */}
+        <Route path="/contact" element={<ContactUs />} />
         {/* <Route path="/place/:id" element={<PlaceDetails places={places} />} /> */}
       </Routes>
     </Router>

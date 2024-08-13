@@ -1,6 +1,6 @@
 import React from "react";
-import FormInput from "../components/FormInput";
-import CustomButton from "../components/CustomButton";
+import FormInput from "../components/FormInput.component";
+import CustomButton from "../components/CustomButton.component";
 
 class ContactUs extends React.Component {
     constructor(props) {
@@ -33,8 +33,8 @@ class ContactUs extends React.Component {
         const { name, email, comment } = this.state;
 
         return (
-            <section className="bg-whiteSmoke min-h-screen flex items-center justify-center mt-16">
-                <div className="w-full max-w-md mx-auto bg-whiteSmoke shadow-lg rounded-lg py-8">
+            <section className="bg-whiteSmoke min-h-screen fixed w-full top-10 flex items-center justify-center">
+                <div className="w-full max-w-2xl mx-auto bg-whiteSmoke shadow-lg rounded-lg py-8">
                     <div className="flex flex-col items-center px-4 sm:px-6 lg:px-8">
                         <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">Contact Us</h2>
                         <p className="mt-2 text-base text-gray-600">
@@ -66,7 +66,7 @@ class ContactUs extends React.Component {
                                     <textarea
                                         name="comment"
                                         id="comment"
-                                        rows="5"
+                                        rows="3"
                                         placeholder="Enter your comment"
                                         value={comment}
                                         onChange={this.handleChange}
