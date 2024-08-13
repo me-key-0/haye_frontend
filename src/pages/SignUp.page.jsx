@@ -46,11 +46,11 @@ class SignUp extends React.Component {
     render() {
         const { displayName, email, password, confirmPassword } = this.state;
         return (
-            <section className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-whiteSmoke">
-                <div className="w-full max-w-md mx-auto bg-white shadow-lg rounded-lg py-6 px-4">
+            <section className="flex items-center justify-center min-h-screen pt-16 bg-whiteSmoke">
+                <div className="w-full max-w-md mx-auto bg-white shadow-lg rounded-lg p-4">
                     <div className="flex flex-col items-center">
-                        <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign up</h2>
-                        <p className="mt-1 text-base text-gray-600">
+                        <h2 className="text-xl font-bold leading-tight text-black sm:text-2xl">Sign up</h2>
+                        <p className="mt-1 text-sm text-gray-600">
                             Already have an account?{' '}
                             <a
                                 href="/signin"
@@ -60,8 +60,8 @@ class SignUp extends React.Component {
                             </a>
                         </p>
 
-                        <form onSubmit={this.handleSubmit} className="mt-6 w-full">
-                            <div className="space-y-4">
+                        <form onSubmit={this.handleSubmit} className="mt-4 w-full">
+                            <div className="space-y-3">
                                 <FormInput
                                     type="text"
                                     name="displayName"
@@ -100,7 +100,7 @@ class SignUp extends React.Component {
                                 />
                                 <CustomButton
                                     type="submit"
-                                    className="bg-blue-600 border-blue-600 hover:bg-blue-700 focus:bg-blue-700"
+                                    className="bg-blue-600 border-blue-600 hover:bg-blue-700 focus:bg-blue-700 py-2 px-4 text-sm"
                                 >
                                     Sign up
                                 </CustomButton>

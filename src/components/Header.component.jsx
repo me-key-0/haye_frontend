@@ -1,8 +1,7 @@
-
 import { Link, useLocation } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link'; // Import HashLink
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 
 const Header = ({ currentUser }) => {
     const location = useLocation();
@@ -48,11 +47,19 @@ const Header = ({ currentUser }) => {
                             </Link>
                         </li>
                         <li>
-                            <Link
-                                to="/#about"
-                                className={`text-base transition-all duration-200 hover:text-opacity-80 ${isActive('#about')}`}
+                            <HashLink
+                                to="/#about" // Update to HashLink
+                                className={`text-base transition-all duration-200 hover:text-opacity-80 ${isActive('/#about')}`}
                             >
                                 About
+                            </HashLink>
+                        </li>
+                        <li>
+                            <Link
+                                to="/contact"
+                                className={`text-base transition-all duration-200 hover:text-opacity-80 ${isActive('/contact')}`}
+                            >
+                                ContactUs
                             </Link>
                         </li>
                     </ul>
@@ -73,6 +80,8 @@ const Header = ({ currentUser }) => {
         </div>
     );
 }
+
+
 
 const mapStateToProps = state => ({
     currentUser: state.user.currentUser
