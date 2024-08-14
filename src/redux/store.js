@@ -1,10 +1,24 @@
-import { createStore, applyMiddleware} from "redux";
-import logger from "redux-logger";
+// redux/store.js
+import { configureStore } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import userReducer from './Slices/userSlice';
+import placesReducer from './Slices/placesSlice';
+import { rootSaga } from './root-saga';
 
-import rootReducer from "./root-reducer";
+// Create the saga middleware
+const sagaMiddleware = createSagaMiddleware();
 
-const middlewares = [logger];
+// Configure the store
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    places: placesReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware),
+});
 
-const store = createStore(rootReducer, applyMiddleware(...middlewares));
+// Run the root saga
+sagaMiddleware.run(rootSaga);
 
 export default store;

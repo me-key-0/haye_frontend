@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { HashLink } from 'react-router-hash-link'; // Import HashLink
+import { HashLink } from 'react-router-hash-link'; 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -59,7 +59,7 @@ const Header = ({ currentUser }) => {
                                 to="/contact"
                                 className={`text-base transition-all duration-200 hover:text-opacity-80 ${isActive('/contact')}`}
                             >
-                                ContactUs
+                                Contact
                             </Link>
                         </li>
                     </ul>
@@ -81,14 +81,12 @@ const Header = ({ currentUser }) => {
     );
 }
 
-
-
 const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
 });
 
 Header.propTypes = {
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(Header);
