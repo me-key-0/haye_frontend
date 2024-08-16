@@ -17,7 +17,7 @@ const Header = ({ currentUser }) => {
                     <img
                         src="assets/Haye_light.png"
                         alt="Logo"
-                        className="w-auto h-8"
+                        className="w-10 h-10 rounded-full transition-transform duration-300 hover:scale-150"
                     />
                 </Link>
                 <nav className="flex">
@@ -48,7 +48,7 @@ const Header = ({ currentUser }) => {
                         </li>
                         <li>
                             <HashLink
-                                to="/#about" // Update to HashLink
+                                to="/#about"
                                 className={`text-base transition-all duration-200 hover:text-opacity-80 ${isActive('/#about')}`}
                             >
                                 About

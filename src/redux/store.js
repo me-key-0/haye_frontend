@@ -1,5 +1,5 @@
 // redux/store.js
-import { configureStore } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import userReducer from './Slices/userSlice';
 import placesReducer from './Slices/placesSlice';
