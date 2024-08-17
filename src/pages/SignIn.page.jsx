@@ -1,19 +1,20 @@
-import  { useState, useEffect } from 'react';
-import PropTypes from 'prop-types'; 
-import { connect } from 'react-redux'; // Import connect
-import { emailSignInStart, googleSignInStart } from '../redux/Slices/userSlice'; // Import actions
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { emailSignInStart, googleSignInStart } from '../redux/Slices/userSlice';
 import FormInput from "../components/FormInput.component";
 import CustomButton from "../components/CustomButton.component";
 import { useNavigate } from 'react-router-dom';
 
-const SignIn = ({ emailSignInStart, googleSignInStart, status, error }) => {
+const SignIn = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [localError, setLocalError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    emailSignInStart(credentials); // Dispatch action to start email sign-in
+    dispatch(emailSignInStart(credentials));
   };
 
   const handleChange = (event) => {
@@ -22,12 +23,12 @@ const SignIn = ({ emailSignInStart, googleSignInStart, status, error }) => {
   };
 
   const handleGoogleSignIn = () => {
-    googleSignInStart(); // Dispatch action to start Google sign-in
+    dispatch(googleSignInStart());
   };
 
   useEffect(() => {
     if (status === 'succeeded') {
-      navigate('/'); // Redirect to dashboard on successful sign-in
+      navigate('/');
     }
     if (error) {
       setLocalError(error);
@@ -65,13 +66,13 @@ const SignIn = ({ emailSignInStart, googleSignInStart, status, error }) => {
               <CustomButton
                 type="submit"
                 className="w-full bg-blue-600 border-blue-600 hover:bg-blue-700 focus:bg-blue-700"
-                disabled={status === 'loading'} // Disable button while loading
+                disabled={status === 'loading'}
               >
                 {status === 'loading' ? 'Logging in...' : 'Log in'}
               </CustomButton>
             </div>
           </form>
-          {localError && <p className="mt-3 text-red-500">{localError}</p>} {/* Display error message */}
+          {localError && <p className="mt-3 text-red-500">{localError}</p>}
           <div className="mt-5 space-y-3 w-full">
             <CustomButton
               type="button"
@@ -90,23 +91,6 @@ const SignIn = ({ emailSignInStart, googleSignInStart, status, error }) => {
       </div>
     </section>
   );
-}
-
-SignIn.propTypes = {
-  emailSignInStart: PropTypes.func.isRequired,
-  googleSignInStart: PropTypes.func.isRequired,
-  status: PropTypes.string.isRequired,
-  error: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-  status: state.user.status,
-  error: state.user.error
-});
-
-const mapDispatchToProps = {
-  emailSignInStart,
-  googleSignInStart
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default SignIn;
