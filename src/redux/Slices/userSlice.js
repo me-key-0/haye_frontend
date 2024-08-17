@@ -49,6 +49,7 @@ const userSlice = createSlice({
     signUpStart(state) {
       state.status = 'loading';
     },
+    
     signUpSuccess(state, action) {
       state.status = 'succeeded';
       state.currentUser = action.payload.user;
@@ -57,6 +58,10 @@ const userSlice = createSlice({
     signUpFailure(state, action) {
       state.status = 'failed';
       state.error = action.payload;
+    },
+    signOutStart(state) {
+      state.status = 'Loading';
+      
     },
   },
 });
@@ -69,6 +74,7 @@ export const {
   emailSignInStart,
   signInSuccess,
   signInFailure,
+  signOutStart,
   signOutSuccess,
   signOutFailure,
   signUpStart,

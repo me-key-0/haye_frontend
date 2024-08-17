@@ -1,13 +1,23 @@
+
 import { Link, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link'; 
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { signOutStart } from '../redux/Slices/userSlice';
 
-const Header = ({ currentUser }) => {
+const Header = () => {
     const location = useLocation();
     const currentPath = location.pathname;
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.user.currentUser);
 
     const isActive = (path) => currentPath === path ? 'text-blue-600 font-semibold' : '';
+
+    const handleSignOut = () => {
+        
+            dispatch(signOutStart({ currentUser }));
+        
+    };
 
     return (
         <div>
@@ -65,9 +75,12 @@ const Header = ({ currentUser }) => {
                     </ul>
                 </nav>
                 {currentUser ? (
-                    <div className="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-black rounded-full">
+                    <button 
+                        onClick={handleSignOut} 
+                        className="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-black rounded-full"
+                    >
                         Sign out
-                    </div>
+                    </button>
                 ) : (
                     <Link
                         className="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-black rounded-full"
@@ -79,14 +92,10 @@ const Header = ({ currentUser }) => {
             </header>
         </div>
     );
-}
-
-const mapStateToProps = state => ({
-    currentUser: state.user.currentUser,
-});
+};
 
 Header.propTypes = {
     currentUser: PropTypes.object,
 };
 
-export default connect(mapStateToProps)(Header);
+export default Header;

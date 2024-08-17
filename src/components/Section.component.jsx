@@ -23,11 +23,11 @@ const Section = ({ id, title, images, description, heading, linkTo }) => {
           <div>
             <Slider {...settings}>
               {images.map((image, index) => (
-                <div key={index}>
+                <div className='w-full h-full' key={index}>
                   <img
                     src={image.src}
                     alt={image.alt}
-                    className="w-full h-auto object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
               ))}
