@@ -27,7 +27,7 @@ const SignIn = ({ emailSignInStart, googleSignInStart, status, error }) => {
 
   useEffect(() => {
     if (status === 'succeeded') {
-      navigate('/dashboard'); // Redirect to dashboard on successful sign-in
+      navigate('/'); // Redirect to dashboard on successful sign-in
     }
     if (error) {
       setLocalError(error);

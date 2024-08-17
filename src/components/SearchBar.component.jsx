@@ -1,7 +1,10 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
 
-const SearchBar = ({ onSearch }) => {
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { searchPlacesRequest } from '../redux/Slices/placesSlice';
+
+const SearchBar = () => {
+  const dispatch = useDispatch();
   const [query, setQuery] = useState('');
   const [price, setPrice] = useState('');
   const [rating, setRating] = useState('');
@@ -9,7 +12,7 @@ const SearchBar = ({ onSearch }) => {
   const [filterOpen, setFilterOpen] = useState(false);
 
   const handleSearch = () => {
-    onSearch({ query, price, rating, location });
+    dispatch(searchPlacesRequest({ query, price, rating, location }));
   };
 
   return (
@@ -87,11 +90,6 @@ const SearchBar = ({ onSearch }) => {
       </div>
     </div>
   );
-};
-
-// Prop validation
-SearchBar.propTypes = {
-  onSearch: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

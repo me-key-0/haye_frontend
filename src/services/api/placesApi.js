@@ -10,6 +10,16 @@ export const fetchAllPlaces = async () => {
     throw error;
   }
 };
+export const fetchPlaces = async (query, price, rating, location) => {
+  try {
+    const response = await axiosInstance.get('/places', {
+      params: { query, price, rating, location },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch places');
+  }
+};
 
 // Fetch a place by ID
 export const fetchPlaceById = async (id) => {

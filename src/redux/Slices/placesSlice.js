@@ -11,6 +11,17 @@ const placesSlice = createSlice({
   name: 'places',
   initialState,
   reducers: {
+    searchPlacesRequest: (state) => {
+      state.loading = true;
+    },
+    searchPlacesSuccess: (state, action) => {
+      state.loading = false;
+      state.places = action.payload;
+    },
+    searchPlacesFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     fetchAllPlacesRequest(state) {
       state.loading = true;
     },
@@ -33,6 +44,10 @@ export const {
   fetchAllPlacesSuccess,
   fetchAllPlacesFailure,
   setAllPlaces,
+  searchPlacesRequest, 
+  searchPlacesSuccess, 
+  searchPlacesFailure
 } = placesSlice.actions;
 
 export default placesSlice.reducer;
+
