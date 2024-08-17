@@ -1,4 +1,3 @@
-
 import { Navigate, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -10,10 +9,9 @@ import Places from './pages/Places.page';
 import SignIn from './pages/SignIn.page';
 import SignUp from './pages/SignUp.page';
 import Header from './components/Header.component';
-import { setCurrentUser } from "./redux/user/user.actions";
 import ContactUs from './pages/ContactUs.page';
 
-const App = ({ currentUser}) => {
+const App = ({ currentUser }) => {
   return (
     <Router>
       <Header />
@@ -28,23 +26,17 @@ const App = ({ currentUser}) => {
           element={currentUser ? <Navigate to="/" /> : <SignIn />} 
         />
         <Route path="/contact" element={<ContactUs />} />
-        {/* <Route path="/place/:id" element={<PlaceDetails places={places} />} /> */}
       </Routes>
     </Router>
   );
 }
 
 const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user))
+  currentUser: state.user.currentUser,
 });
 
 App.propTypes = {
-  currentUser: PropTypes.object, // Assuming currentUser is an object, adjust if necessary
-  setCurrentUser: PropTypes.func.isRequired
+  currentUser: PropTypes.object,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

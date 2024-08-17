@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { HashLink } from 'react-router-hash-link'; // Import HashLink
+import { HashLink } from 'react-router-hash-link'; 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -17,7 +17,7 @@ const Header = ({ currentUser }) => {
                     <img
                         src="assets/Haye_light.png"
                         alt="Logo"
-                        className="w-auto h-8"
+                        className="w-10 h-10 rounded-full transition-transform duration-300 hover:scale-150"
                     />
                 </Link>
                 <nav className="flex">
@@ -48,7 +48,7 @@ const Header = ({ currentUser }) => {
                         </li>
                         <li>
                             <HashLink
-                                to="/#about" // Update to HashLink
+                                to="/#about"
                                 className={`text-base transition-all duration-200 hover:text-opacity-80 ${isActive('/#about')}`}
                             >
                                 About
@@ -59,7 +59,7 @@ const Header = ({ currentUser }) => {
                                 to="/contact"
                                 className={`text-base transition-all duration-200 hover:text-opacity-80 ${isActive('/contact')}`}
                             >
-                                ContactUs
+                                Contact
                             </Link>
                         </li>
                     </ul>
@@ -81,14 +81,12 @@ const Header = ({ currentUser }) => {
     );
 }
 
-
-
 const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
 });
 
 Header.propTypes = {
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(Header);
