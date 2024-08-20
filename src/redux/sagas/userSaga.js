@@ -14,7 +14,10 @@ import {
   signOutFailure, 
   signUpStart,
   signUpSuccess,
-  signUpFailure
+  signUpFailure,
+  verifyOtpSuccess,
+  verifyOtpFailure,
+  verifyOtpStart
 } from '../Slices/userSlice';
 
 
@@ -83,8 +86,6 @@ function* signUpSaga(action) {
 // Sign out Saga
 function* signOutSaga(action) {
   try {
-    yield put(signOutStart());
-
     const { signInMethod } = action.payload.currentUser;
     
     if (signInMethod === 'google') {
@@ -101,7 +102,14 @@ function* signOutSaga(action) {
     yield put(signOutFailure(error.message));
   }
 }
-
+function* verifyOtpSaga(action) {
+  try {
+    const response = yield call(axios.post, '/api/verify-otp', action.payload);
+    yield put(verifyOtpSuccess(response.data));
+  } catch (error) {
+    yield put(verifyOtpFailure(error.message));
+  }
+}
 // Saga for fetching all users
 function* fetchAllUsersSaga() {
   try {
@@ -121,7 +129,7 @@ export function* userSaga() {
     //takeEvery(UserActionTypes.CHECK_USER_SESSION, isUserAuthenticated),
     takeEvery(signOutStart, signOutSaga),
     takeEvery(signUpStart.type, signUpSaga),
-    //takeEvery(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp)
+    takeEvery(verifyOtpStart.type, verifyOtpSaga)
 
   ]);
 }

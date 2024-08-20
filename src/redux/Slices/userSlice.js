@@ -37,6 +37,10 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload;
     },
+    signOutStart(state) {
+      state.status = 'Loading';
+      
+    },
     signOutSuccess(state) {
       state.status = 'succeeded';
       state.currentUser = null;
@@ -59,10 +63,19 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload;
     },
-    signOutStart(state) {
-      state.status = 'Loading';
-      
+    verifyOtpStart: (state) => {
+      state.status = 'loading';
     },
+    verifyOtpSuccess: (state, action) => {
+      state.status = 'succeeded';
+      state.error = null
+      state.currentUser = action.payload;
+    },
+    verifyOtpFailure: (state, action) => {
+      state.status = 'failed';
+      state.error = action.payload;
+    },
+    
   },
 });
 
@@ -80,6 +93,9 @@ export const {
   signUpStart,
   signUpSuccess,
   signUpFailure,
+  verifyOtpStart,
+  verifyOtpSuccess,
+  verifyOtpFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

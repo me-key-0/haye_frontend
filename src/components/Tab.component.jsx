@@ -1,42 +1,64 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllPlacesRequest } from '../redux/Slices/placesSlice'; 
-import { setAllPlaces } from '../redux/Slices/placesSlice'; 
-import Item from './CardItem.component'; 
-
+import { useState } from 'react';
+import places from '../services/places.data'; // Adjust the path according to your file structure
+import Item from './CardItem.component'; // Assuming this is your item card component
+import SearchBar from './SearchBar.component'; // Import the SearchBar component
 
 const Tab = () => {
   const [activeTab, setActiveTab] = useState('All'); // Set default tab to 'All'
-  const dispatch = useDispatch();
-  const allPlaces = useSelector((state) => state.places.allPlaces); // Replace with your actual state selector
-
-  useEffect(() => {
-    // Fetch all places when the component mounts
-    const loadAllPlaces = async () => {
-      try {
-        const places = await fetchAllPlacesRequest();
-        dispatch(setAllPlaces(places)); // Dispatch the action to update Redux state
-      } catch (error) {
-        console.error('Error loading all places:', error);
-      }
-    };
-
-    loadAllPlaces();
-  }, [dispatch]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [price, setPrice] = useState('');
+  const [rating, setRating] = useState('');
+  const [location, setLocation] = useState('');
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
   const filterPlaces = (category) => {
-    if (category === 'All') {
-      return allPlaces;
+    let filteredPlaces = places;
+
+    if (category !== 'All') {
+      filteredPlaces = filteredPlaces.filter(place => place.category === category);
     }
-    return allPlaces.filter(place => place.category === category);
+
+    if (searchQuery) {
+      filteredPlaces = filteredPlaces.filter(place =>
+        place.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (price) {
+      // Implement price filter if applicable
+      // This assumes price in `places` data matches 'low', 'medium', 'high'
+      filteredPlaces = filteredPlaces.filter(place => place.priceRange === price);
+    }
+
+    if (rating) {
+      filteredPlaces = filteredPlaces.filter(place => place.rating >= parseInt(rating));
+    }
+
+    if (location) {
+      // Implement location filter if applicable
+      // This filter assumes location is a part of place data
+      filteredPlaces = filteredPlaces.filter(place => place.location.toLowerCase().includes(location.toLowerCase()));
+    }
+
+    return filteredPlaces;
   };
 
   return (
     <div>
+      <SearchBar 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        price={price}
+        setPrice={setPrice}
+        rating={rating}
+        setRating={setRating}
+        location={location}
+        setLocation={setLocation}
+      />
+
       <div className="w-3/4 mx-auto text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
         <ul className="flex flex-wrap -mb-px">
           {['All', 'Hotels', 'Restaurants', 'Cafes', 'Lounges'].map((tab) => (
@@ -66,12 +88,12 @@ const Tab = () => {
                 {filterPlaces(category).length > 0 ? (
                   filterPlaces(category).map((place) => (
                     <Item
-                      key={place._id}
+                      key={place.id}
                       title={place.name}
                       rating={place.rating}
-                      priceRange={place.priceRange}
-                      imageSrc={place.image}
-                      category={place.category}
+                      priceRange={place.priceRange} // Ensure this is available in your places data
+                      imageSrc={place.image} // Ensure this is available in your places data
+                      category={place.category} // Ensure this is available in your places data
                     />
                   ))
                 ) : (

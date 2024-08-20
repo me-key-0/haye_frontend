@@ -1,18 +1,11 @@
+import PropTypes from 'prop-types'; 
+import { useState } from 'react';// Import PropTypes
 
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { searchPlacesRequest } from '../redux/Slices/placesSlice';
-
-const SearchBar = () => {
-  const dispatch = useDispatch();
-  const [query, setQuery] = useState('');
-  const [price, setPrice] = useState('');
-  const [rating, setRating] = useState('');
-  const [location, setLocation] = useState('');
+const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRating, location, setLocation }) => {
   const [filterOpen, setFilterOpen] = useState(false);
 
   const handleSearch = () => {
-    dispatch(searchPlacesRequest({ query, price, rating, location }));
+    // The parent component (Tab) will handle filtering based on these values
   };
 
   return (
@@ -21,8 +14,8 @@ const SearchBar = () => {
         <div className="relative flex-1">
           <input
             type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="block w-full pl-3 pr-16 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base bg-white"
             placeholder="Search..."
           />
@@ -90,6 +83,18 @@ const SearchBar = () => {
       </div>
     </div>
   );
+};
+
+// Define PropTypes for SearchBar
+SearchBar.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
+  setSearchQuery: PropTypes.func.isRequired,
+  price: PropTypes.string.isRequired,
+  setPrice: PropTypes.func.isRequired,
+  rating: PropTypes.string.isRequired,
+  setRating: PropTypes.func.isRequired,
+  location: PropTypes.string.isRequired,
+  setLocation: PropTypes.func.isRequired,
 };
 
 export default SearchBar;
