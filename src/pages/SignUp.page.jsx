@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FormInput from '../components/FormInput.component';
@@ -13,16 +13,15 @@ const SignUp = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { currentUser, status, error } = useSelector((state) => state.user);
+    const { status, error } = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (status === 'succeeded' && currentUser) {
-            alert('Sign up successful!');
-            navigate('/signin'); // Redirect to dashboard or another page after successful sign-up
+        if (status === 'Loading' && !error) {
+            navigate('/otp'); // Redirect to OTP page
         }
-    }, [status, currentUser, navigate]);
+    }, [status, error, navigate]);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
         if (password !== confirmPassword) {

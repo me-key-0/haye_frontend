@@ -42,5 +42,5 @@ export const signUpUser = async (displayName, email, password) => {
 };
 
 export const signOutUser = () => {
-  return axiosInstance.post('/logout'); // Call the backend logout endpoint
+  return axiosInstance.post('users/logout'); // Call the backend logout endpoint
 };

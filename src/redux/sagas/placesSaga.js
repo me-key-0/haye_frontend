@@ -6,8 +6,11 @@ import { fetchAllPlacesRequest,
   fetchAllPlacesFailure,
   searchPlacesRequest,
   searchPlacesSuccess, 
-  searchPlacesFailure } from '../Slices/placesSlice';
-import { fetchPlaces } from '../../services/api/placesApi';
+  searchPlacesFailure,
+  fetchPlaceByIdFailure,
+  fetchPlaceByIdRequest,
+  fetchPlaceByIdSuccess } from '../Slices/placesSlice';
+import { searchPlaces , fetchPlaceById } from '../../services/api/placesApi';
 
 
 // Worker Saga: will be fired on fetchAllPlacesRequest actions
@@ -26,10 +29,20 @@ function* fetchAllPlacesSaga() {
 function* searchPlacesSaga(action) {
   try {
     const { query, price, rating, location } = action.payload;
-    const places = yield call(fetchPlaces, query, price, rating, location);
+    const places = yield call(searchPlaces, query, price, rating, location);
     yield put(searchPlacesSuccess(places));
   } catch (error) {
     yield put(searchPlacesFailure(error.message));
+  }
+}
+
+function* fetchPlaceByIdSaga(action) {
+  try {
+    const placeId = action.payload;
+    const place = yield call(fetchPlaceById, placeId);
+    yield put(fetchPlaceByIdSuccess(place));
+  } catch (error) {
+    yield put(fetchPlaceByIdFailure(error.message));
   }
 }
 
@@ -37,6 +50,7 @@ function* searchPlacesSaga(action) {
 export function* placesSaga() {
   yield takeEvery(fetchAllPlacesRequest.type, fetchAllPlacesSaga);
   yield takeEvery(searchPlacesRequest.type, searchPlacesSaga);
+  yield takeEvery(fetchPlaceByIdRequest.type, fetchPlaceByIdSaga);
 
 
 }

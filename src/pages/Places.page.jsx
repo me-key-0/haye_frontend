@@ -1,11 +1,12 @@
-import Tab from "../components/Tab.component"
-import SearchBar from '../components/SearchBar.component';
+import Places from "../components/Places.component"
+
+
 
 function PlacesPage() {
   return (
     <div className="pt-20">
-      <SearchBar />
-      <Tab />
+      
+      <Places />
       
     </div>
   )

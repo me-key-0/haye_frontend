@@ -1,23 +1,35 @@
-
-import { Link, useLocation } from 'react-router-dom';
+import {  useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link'; 
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { signOutStart } from '../redux/Slices/userSlice';
 
+
 const Header = () => {
     const location = useLocation();
     const currentPath = location.pathname;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const currentUser = useSelector(state => state.user.currentUser);
+    const signOutStatus = useSelector(state => state.user.status);
 
     const isActive = (path) => currentPath === path ? 'text-blue-600 font-semibold' : '';
 
     const handleSignOut = () => {
         
             dispatch(signOutStart({ currentUser }));
+
+            
         
     };
+
+      // Redirect to sign-in page on successful sign-out
+  useEffect(() => {
+    if (signOutStatus === 'succeeded') {
+      navigate('/signin');
+    }
+  }, [signOutStatus, navigate]);
 
     return (
         <div>

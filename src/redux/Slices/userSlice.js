@@ -4,12 +4,12 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     currentUser: null,
-    users: [], // For fetching all users, if needed
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    users: [],
+    status: 'idle', // standardized status: 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
   },
   reducers: {
-    // Actions related to fetching all users
+    // Fetching all users
     fetchAllUsersRequest(state) {
       state.status = 'loading';
     },
@@ -21,7 +21,8 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload;
     },
-    // Actions related to authentication
+
+    // Authentication actions
     googleSignInStart(state) {
       state.status = 'loading';
     },
@@ -37,6 +38,9 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload;
     },
+    signOutStart(state) {
+      state.status = 'loading'; // Fixing inconsistent status case
+    },
     signOutSuccess(state) {
       state.status = 'succeeded';
       state.currentUser = null;
@@ -49,7 +53,6 @@ const userSlice = createSlice({
     signUpStart(state) {
       state.status = 'loading';
     },
-    
     signUpSuccess(state, action) {
       state.status = 'succeeded';
       state.currentUser = action.payload.user;
@@ -59,9 +62,17 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload;
     },
-    signOutStart(state) {
-      state.status = 'Loading';
-      
+    verifyOtpStart(state) {
+      state.status = 'loading';
+    },
+    verifyOtpSuccess(state, action) {
+      state.status = 'succeeded';
+      state.error = null;
+      state.currentUser = action.payload;
+    },
+    verifyOtpFailure(state, action) {
+      state.status = 'failed';
+      state.error = action.payload;
     },
   },
 });
@@ -80,6 +91,9 @@ export const {
   signUpStart,
   signUpSuccess,
   signUpFailure,
+  verifyOtpStart,
+  verifyOtpSuccess,
+  verifyOtpFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

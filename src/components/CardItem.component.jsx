@@ -1,17 +1,13 @@
+import PropTypes from 'prop-types';
 
-"use client";
-
-import { Card } from "flowbite-react";
-import PropTypes from "prop-types";
-
-export function Item({ imgSrc, title, rating, price, onAddToFavorites }) {
+export function Item({ imgSrc, title, name, rating, priceRange, onAddToFavorites, onClick }) {
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       stars.push(
         <svg
           key={i}
-          className={`h-5 w-5 ${i <= rating ? 'text-yellow-300' : 'text-gray-300'}`}
+          className={`h-5 w-5 ${i <= rating ? "text-yellow-300" : "text-gray-300"}`}
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -24,48 +20,55 @@ export function Item({ imgSrc, title, rating, price, onAddToFavorites }) {
   };
 
   return (
-    <Card className="max-w-sm">
-      <button onClick={onAddToFavorites} className="absolute top-2 right-2 text-gray-500 hover:text-red-500">
-        <svg
-          className="h-6 w-6"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.828a4 4 0 010-5.657z" />
-        </svg>
-      </button>
-      <img src={imgSrc} alt="Some place" className="rounded-t-lg" />
-      <div className="p-5">
-        <a href="#">
-          <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{title}</h5>
-        </a>
-        <div className="mb-5 mt-2.5 flex items-center">
-          {renderStars(rating)}
-          <span className="ml-3 mr-2 rounded bg-cyan-100 px-2.5 py-0.5 text-xs font-semibold text-cyan-800 dark:bg-cyan-200 dark:text-cyan-800">
-            {rating}.0
-          </span>
+    <div className="w-full flex flex-col md:flex-row md:max-w-full mb-6 h-48 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+      <div className="relative flex-none w-full md:w-1/3 h-full">
+        <img src={imgSrc} alt={title} className="object-cover h-full w-full" />
+      </div>
+      <div className="p-5 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 className="text-xl font-semibold tracking-tight text-gray-900">{name}</h3>
+          <h5 className="text-lg mt-1 font-medium tracking-tight text-gray-700">{title}</h5>
+          <div className="mb-2 mt-2 flex items-center">
+            {renderStars(rating)}
+            <span className="ml-2 rounded bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-800">
+              {rating}.0
+            </span>
+          </div>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-3xl font-bold text-gray-900 dark:text-white">${price}</span>
-          <a
-            href="#"
-            className="rounded-lg bg-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
-          >
-            Add to cart
-          </a>
+        <div className="flex justify-between items-center mt-3">
+          <span className="text-xl font-bold text-gray-900">Price Range: {priceRange}</span>
+          <div className="flex items-center space-x-4">
+            <button onClick={onAddToFavorites} className=" text-gray-500 hover:text-red-500">
+              <svg
+                className="h-6 w-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.828a4 4 0 010-5.657z" />
+              </svg>
+            </button>
+            <button
+              onClick={onClick}
+              className="rounded-lg bg-cyan-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300"
+            >
+              More Details
+            </button>
+          </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
 Item.propTypes = {
   imgSrc: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired, 
   title: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
-  price: PropTypes.number.isRequired,
+  priceRange: PropTypes.string.isRequired,
   onAddToFavorites: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 Item.defaultProps = {

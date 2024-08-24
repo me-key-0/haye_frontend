@@ -1,27 +1,34 @@
-import React from 'react';
-import events from '../services/events.data';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import ESection from './ESection.component';
+import eventsData from '../services/events.data';
 
-class TrendingPlaces extends React.Component {
-    constructor(props){
-        super(props);
-    this.state = {
-        events : events
-    };
-    }
-    
+const Upcoming = ({ onEventSelect }) => {
+  const [events] = useState(eventsData);
 
-render() {
+  const handleScheduleClick = (event) => {
+    onEventSelect(event);
+    document.getElementById('event-scheduler').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Filter events to show only the upcoming ones
+  const filteredEvents = events.filter(event => new Date(event.date) >= new Date());
+
+  const items = filteredEvents.map(event => ({
+    ...event,
+    onClick: () => handleScheduleClick(event)
+  }));
+
   return (
     <div>
-        <h3 className="text-xl font-bold mb-4" >Upcoming Events</h3>
-        {events.map(event => (
-          <div key={event.id}>{event.name}</div>
-        ))}
-      </div>
+      <h3 className="text-xl font-bold mb-4">Upcoming Events</h3>
+      <ESection title="Upcoming Events" items={items} type="event" />
+    </div>
   );
-}
-}
-export default TrendingPlaces;
+};
 
+Upcoming.propTypes = {
+  onEventSelect: PropTypes.func.isRequired,
+};
 
-
+export default Upcoming;

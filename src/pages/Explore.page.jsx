@@ -1,6 +1,6 @@
 
 import { Component } from 'react';
-import ExploreSection from '../components/ExploreSection.component';
+import ESection from '../components/ESection.component';
 import SearchBar from '../components/SearchBar.component';
 
 class ExplorePage extends Component {
@@ -11,6 +11,9 @@ class ExplorePage extends Component {
         { id: 1, name: 'Place 1', image: 'https://via.placeholder.com/300x200', description: 'A popular place to visit.' },
         { id: 2, name: 'Place 2', image: 'https://via.placeholder.com/300x200', description: 'Known for its stunning views.' },
         { id: 3, name: 'Place 3', image: 'https://via.placeholder.com/300x200', description: 'A must-see attraction.' },
+        { id: 4, name: 'Place 4', image: 'https://via.placeholder.com/300x200', description: 'Offering the best discounts.' },
+        { id: 5, name: 'Place 5', image: 'https://via.placeholder.com/300x200', description: 'Great value for money.' },
+        { id: 6, name: 'Place 6', image: 'https://via.placeholder.com/300x200', description: 'Best deals in the area.' },
       ],
       bestDeals: [
         { id: 4, name: 'Place 4', image: 'https://via.placeholder.com/300x200', description: 'Offering the best discounts.' },
@@ -31,9 +34,9 @@ class ExplorePage extends Component {
     return (
       <div className="pt-20">
         <SearchBar />
-        <ExploreSection title="Trending Places" items={trendingPlaces} />
-        <ExploreSection title="Best Deals" items={bestDeals} />
-        <ExploreSection title="Top Rated Places" items={topRatedPlaces} />
+        <ESection title="Trending Places" items={trendingPlaces}  type="place"/>
+        <ESection title="Best Deals" items={bestDeals}  type="place"/>
+        <ESection title="Top Rated Places" items={topRatedPlaces} type="place"/>
       </div>
     );
   }

@@ -16,14 +16,14 @@ const Section = ({ id, title, images, description, heading, linkTo }) => {
   };
 
   return (
-    <section id={id} className="py-6 sm:py-8 lg:py-10"> 
+    <section id={id} className="py-6 sm:py-8 lg:py-10">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-semibold mb-2">{title}</h2> 
-        <div className="grid items-center grid-cols-1 gap-8 lg:grid-cols-2 mb-4"> 
+        <h2 className="text-2xl font-semibold mb-2">{title}</h2>
+        <div className="grid items-center grid-cols-1 gap-8 lg:grid-cols-2 mb-4">
           <div>
             <Slider {...settings}>
               {images.map((image, index) => (
-                <div className='w-full h-full' key={index}>
+                <div className="w-full h-80" key={index}>
                   <img
                     src={image.src}
                     alt={image.alt}
@@ -34,7 +34,7 @@ const Section = ({ id, title, images, description, heading, linkTo }) => {
             </Slider>
           </div>
           <div>
-            <h1 className="mt-2 text-3xl font-bold text-black lg:mt-4 sm:text-5xl xl:text-6xl"> 
+            <h1 className="mt-2 text-3xl font-bold text-black lg:mt-4 sm:text-5xl xl:text-6xl">
               {heading}
             </h1>
             <p className="mt-2 text-base text-black lg:mt-4 sm:text-lg">
@@ -42,7 +42,7 @@ const Section = ({ id, title, images, description, heading, linkTo }) => {
             </p>
             <Link
               to={linkTo}
-              className="inline-flex items-center px-4 py-2 mt-4 font-semibold text-black transition-all duration-200 bg-yellow-300 rounded-full lg:mt-6 hover:bg-yellow-400 focus:bg-yellow-400" 
+              className="inline-flex items-center px-4 py-2 mt-4 font-semibold text-black transition-all duration-200 bg-yellow-300 rounded-full lg:mt-6 hover:bg-yellow-400 focus:bg-yellow-400"
             >
               Learn More
               <svg

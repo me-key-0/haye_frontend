@@ -10,7 +10,7 @@ export const fetchAllPlaces = async () => {
     throw error;
   }
 };
-export const fetchPlaces = async (query, price, rating, location) => {
+export const searchPlaces = async (query, price, rating, location) => {
   try {
     const response = await axiosInstance.get('/places', {
       params: { query, price, rating, location },
