@@ -16,10 +16,10 @@ const SignUp = () => {
     const { status, error } = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (status === 'otp_sent') {
+        if (status === 'Loading' && !error) {
             navigate('/otp'); // Redirect to OTP page
         }
-    }, [status, navigate]);
+    }, [status, error, navigate]);
 
     const handleSubmit = (event) => {
         event.preventDefault();

@@ -1,8 +1,6 @@
-"use client";
+import PropTypes from 'prop-types';
 
-import PropTypes from "prop-types";
-
-export function Item({ imgSrc, title, name, rating, price, onAddToFavorites }) {
+export function Item({ imgSrc, title, name, rating, priceRange, onAddToFavorites, onClick }) {
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -38,7 +36,7 @@ export function Item({ imgSrc, title, name, rating, price, onAddToFavorites }) {
           </div>
         </div>
         <div className="flex justify-between items-center mt-3">
-          <span className="text-xl font-bold text-gray-900">${price}</span>
+          <span className="text-xl font-bold text-gray-900">Price Range: {priceRange}</span>
           <div className="flex items-center space-x-4">
             <button onClick={onAddToFavorites} className=" text-gray-500 hover:text-red-500">
               <svg
@@ -50,12 +48,12 @@ export function Item({ imgSrc, title, name, rating, price, onAddToFavorites }) {
                 <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.828a4 4 0 010-5.657z" />
               </svg>
             </button>
-            <a
-              href="#"
+            <button
+              onClick={onClick}
               className="rounded-lg bg-cyan-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300"
             >
               More Details
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -65,11 +63,12 @@ export function Item({ imgSrc, title, name, rating, price, onAddToFavorites }) {
 
 Item.propTypes = {
   imgSrc: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired, // Added name as a prop
+  name: PropTypes.string.isRequired, 
   title: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
-  price: PropTypes.number.isRequired,
+  priceRange: PropTypes.string.isRequired,
   onAddToFavorites: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 Item.defaultProps = {

@@ -1,11 +1,12 @@
-import Tab from "../components/Tab.component"
+import Places from "../components/Places.component"
+
 
 
 function PlacesPage() {
   return (
     <div className="pt-20">
       
-      <Tab />
+      <Places />
       
     </div>
   )

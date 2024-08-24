@@ -3,13 +3,13 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useNavigate } from 'react-router-dom';
 
-const ExploreSection = ({ title, items }) => {
+const ESection = ({ title, items, type }) => {
   const navigate = useNavigate();
 
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 4,
+      items: 3,
       slidesToSlide: 3,
     },
     tablet: {
@@ -24,27 +24,31 @@ const ExploreSection = ({ title, items }) => {
     },
   };
 
-  const handleItemClick = (placeId) => {
-    navigate(`/places/${placeId}`);
+  const handleItemClick = (itemId) => {
+    if (type === 'place') {
+      navigate(`/places/${itemId}`);
+    } else if (type === 'event') {
+      navigate(`/events/schedule/${itemId}`);
+    }
   };
 
   return (
     <div className="mb-8">
       <h3 className="text-xl font-bold mb-4">{title}</h3>
       <Carousel
-        swipeable={false}
-        draggable={false}
-        showDots={true}
+        swipeable={true}  // Allow swipe on touch devices
+        draggable={true}  // Allow drag on desktop
+        showDots={true}  // Display dots at the bottom
         responsive={responsive}
-        ssr={true}
-        infinite={true}
-        autoPlay={true}
-        autoPlaySpeed={5000}
-        keyBoardControl={true}
-        customTransition="all .5"
+        ssr={true}  // Enable server-side rendering
+        infinite={true}  // Loop the carousel
+        autoPlay={true}  // Enable automatic sliding
+        autoPlaySpeed={2000}  // Speed of sliding (in milliseconds)
+        keyBoardControl={true}  // Allow keyboard controls
+        customTransition="transform 1000ms ease-in-out"  // Sliding transition effect
         transitionDuration={1000}
         containerClass="carousel-container"
-        removeArrowOnDeviceType={['tablet', 'mobile']}
+        removeArrowOnDeviceType={['tablet', 'mobile']}  // Hide arrows on specific devices
         dotListClass="custom-dot-list-style"
         itemClass="px-4"
       >
@@ -67,7 +71,7 @@ const ExploreSection = ({ title, items }) => {
   );
 };
 
-ExploreSection.propTypes = {
+ESection.propTypes = {
   title: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
@@ -76,6 +80,7 @@ ExploreSection.propTypes = {
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
+  type: PropTypes.oneOf(['place', 'event']).isRequired,  // Determine the type of section
 };
 
-export default ExploreSection;
+export default ESection;

@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   allPlaces: [],
+  place: null,
   loading: false,
   error: null,
 };
@@ -16,7 +17,7 @@ const placesSlice = createSlice({
     },
     searchPlacesSuccess: (state, action) => {
       state.loading = false;
-      state.places = action.payload;
+      state.allPlaces = action.payload;
     },
     searchPlacesFailure: (state, action) => {
       state.loading = false;
@@ -33,6 +34,14 @@ const placesSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    fetchPlaceByIdRequest(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchPlaceByIdSuccess(state, action) {
+      state.loading = false;
+      state.place = action.payload;
+    },
     setAllPlaces(state, action) {
       state.allPlaces = action.payload;
     },
@@ -46,7 +55,10 @@ export const {
   setAllPlaces,
   searchPlacesRequest, 
   searchPlacesSuccess, 
-  searchPlacesFailure
+  searchPlacesFailure,
+  fetchPlaceByIdRequest,
+  fetchPlaceByIdSuccess,
+  fetchPlaceByIdFailure
 } = placesSlice.actions;
 
 export default placesSlice.reducer;

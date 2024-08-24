@@ -1,4 +1,3 @@
-
 import { call, put, takeEvery, all } from 'redux-saga/effects';
 import axios from 'axios';
 import {
@@ -11,26 +10,23 @@ import {
   signInFailure,
   signOutStart,
   signOutSuccess,
-  signOutFailure, 
+  signOutFailure,
   signUpStart,
   signUpSuccess,
   signUpFailure,
   verifyOtpSuccess,
   verifyOtpFailure,
-  verifyOtpStart
+  verifyOtpStart,
 } from '../Slices/userSlice';
 
-
 import { signInWithGoogle } from '../../firebase'; // Import your Google sign-in function
-import { signInUser } from '../../services/api/userApi'; 
-import { signUpUser } from '../../services/api/userApi';
-import { signOutUser } from '../../services/api/userApi';
+import { signInUser, signUpUser, signOutUser } from '../../services/api/userApi';
 import { signOutFromGoogle } from '../../firebase';
-
 
 function* signInWithGoogleSaga() {
   try {
-    const userCredential = yield call(signInWithGoogle); // Call Google sign-in function
+    console.log("Starting Google sign-in...");
+    const userCredential = yield call(signInWithGoogle);
     const user = userCredential.user;
     const data = {
       accessToken: user.accessToken,
@@ -40,54 +36,51 @@ function* signInWithGoogleSaga() {
         uid: user.uid,
         signInMethod: 'google',
       }
-      
     };
-    // This sends the google data to the backend
-  // yield call(axios.post, '/api/users/google-signin', data);
-    
-    yield put(signInSuccess(data)); // Dispatch success action
+    yield put(signInSuccess(data));
+    console.log("Google sign-in successful");
   } catch (error) {
-    yield put(signInFailure(error.message)); // Dispatch failure action
-  }
-}
-
-
-function* signInWithEmailSaga(action) {
-  try {
-    const { email, password } = action.payload;
-    const data = yield call(signInUser, { email, password }); // Call email sign-in function
-    // Dispatch success action with user data
-    yield put(signInSuccess({...data, signInMethod: 'email'}));
-    // Optionally store tokens or user info in localStorage or cookies if needed
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('user', JSON.stringify(data.user));
-  } catch (error) {
-    // Dispatch failure action with error message
+    console.error("Google sign-in failed:", error);
     yield put(signInFailure(error.message));
   }
 }
 
-// Sign up Saga
-function* signUpSaga(action) {
+function* signInWithEmailSaga(action) {
   try {
-    const { displayName, email, password } = action.payload;
-    const data = yield call(signUpUser, { displayName, email, password }); // Call sign-up function
-    yield put(signUpSuccess({ CurrentUser: data })); // Dispatch success action
-    // Optionally store tokens or user info in localStorage or cookies if needed
+    console.log("Starting email sign-in...");
+    const { email, password } = action.payload;
+    const data = yield call(signInUser, { email, password });
+    yield put(signInSuccess({ ...data, signInMethod: 'email' }));
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('user', JSON.stringify(data.user));
-    // Automatically sign in the user after sign-up
-    yield put(signInSuccess(data));
+    console.log("Email sign-in successful");
   } catch (error) {
-    yield put(signUpFailure(error.message)); // Dispatch failure action
+    console.error("Email sign-in failed:", error);
+    yield put(signInFailure(error.message));
   }
 }
 
-// Sign out Saga
+function* signUpSaga(action) {
+  try {
+    console.log("Starting sign-up...");
+    const { displayName, email, password } = action.payload;
+    const data = yield call(signUpUser, { displayName, email, password });
+    yield put(signUpSuccess({ currentUser: data }));
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    yield put(signInSuccess(data));
+    console.log("Sign-up successful");
+  } catch (error) {
+    console.error("Sign-up failed:", error);
+    yield put(signUpFailure(error.message));
+  }
+}
+
 function* signOutSaga(action) {
   try {
+    console.log("Starting sign-out process...");
     const { signInMethod } = action.payload.currentUser;
-    
+
     if (signInMethod === 'google') {
       yield call(signOutFromGoogle);
     } else if (signInMethod === 'email') {
@@ -98,38 +91,44 @@ function* signOutSaga(action) {
     localStorage.removeItem('user');
     
     yield put(signOutSuccess());
+    console.log("Sign-out successful, user signed out.");
   } catch (error) {
+    console.error("Sign-out failed:", error);
     yield put(signOutFailure(error.message));
   }
 }
+
 function* verifyOtpSaga(action) {
   try {
+    console.log("Starting OTP verification...");
     const response = yield call(axios.post, '/api/verify-otp', action.payload);
     yield put(verifyOtpSuccess(response.data));
+    console.log("OTP verification successful");
   } catch (error) {
+    console.error("OTP verification failed:", error);
     yield put(verifyOtpFailure(error.message));
   }
 }
-// Saga for fetching all users
+
 function* fetchAllUsersSaga() {
   try {
+    console.log("Fetching all users...");
     const response = yield call(axios.get, '/api/users');
     yield put(fetchAllUsersSuccess(response.data));
+    console.log("Fetched all users successfully");
   } catch (error) {
+    console.error("Fetching all users failed:", error);
     yield put(fetchAllUsersFailure(error.message));
   }
 }
 
-// Watcher sagas
 export function* userSaga() {
   yield all([
     takeEvery(fetchAllUsersRequest.type, fetchAllUsersSaga),
     takeEvery(googleSignInStart.type, signInWithGoogleSaga),
     takeEvery(emailSignInStart.type, signInWithEmailSaga),
-    //takeEvery(UserActionTypes.CHECK_USER_SESSION, isUserAuthenticated),
-    takeEvery(signOutStart, signOutSaga),
+    takeEvery(signOutStart.type, signOutSaga),
     takeEvery(signUpStart.type, signUpSaga),
     takeEvery(verifyOtpStart.type, verifyOtpSaga)
-
   ]);
 }

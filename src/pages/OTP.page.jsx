@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Box, TextField, Button, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, TextField, Typography } from '@mui/material';
 import { verifyOtpStart } from '../redux/Slices/userSlice';
+
+import CustomButton  from '../components/CustomButton.component';
 
 // OTP Component using MUI
 const OTP = ({ separator, length, value, onChange }) => {
   const inputRefs = React.useRef([]);
-
+  
   const focusInput = (targetIndex) => {
     inputRefs.current[targetIndex]?.focus();
   };
@@ -108,6 +110,7 @@ OTP.propTypes = {
 const OtpPage = () => {
   const [otp, setOtp] = useState('');
   const dispatch = useDispatch();
+  const { status } = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -124,14 +127,12 @@ const OtpPage = () => {
           <Box className="flex justify-center mb-6">
             <OTP separator={<span className="mx-2">-</span>} value={otp} onChange={setOtp} length={6} />
           </Box>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-          >
-            Verify OTP
-          </Button>
+          <CustomButton
+                type="submit"
+                className="w-full bg-blue-600 border-blue-600 hover:bg-blue-700 focus:bg-blue-700"
+              >
+                {status === 'loading' ? 'Verifying...' : 'Verify'}
+            </CustomButton>
         </form>
       </Box>
     </Box>

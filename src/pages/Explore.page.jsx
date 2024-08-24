@@ -1,6 +1,6 @@
 
 import { Component } from 'react';
-import ExploreSection from '../components/ExploreSection.component';
+import ESection from '../components/ESection.component';
 import SearchBar from '../components/SearchBar.component';
 
 class ExplorePage extends Component {
@@ -34,9 +34,9 @@ class ExplorePage extends Component {
     return (
       <div className="pt-20">
         <SearchBar />
-        <ExploreSection title="Trending Places" items={trendingPlaces} />
-        <ExploreSection title="Best Deals" items={bestDeals} />
-        <ExploreSection title="Top Rated Places" items={topRatedPlaces} />
+        <ESection title="Trending Places" items={trendingPlaces}  type="place"/>
+        <ESection title="Best Deals" items={bestDeals}  type="place"/>
+        <ESection title="Top Rated Places" items={topRatedPlaces} type="place"/>
       </div>
     );
   }

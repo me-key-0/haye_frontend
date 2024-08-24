@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import places from '../services/places.data'; // Adjust the path according to your file structure
-import Item from './CardItem.component'; // Assuming this is your item card component
-import SearchBar from './SearchBar.component'; // Import the SearchBar component
+import { useNavigate } from 'react-router-dom'; 
+import places from '../services/places.data';
+import Item from './CardItem.component';
+import SearchBar from './SearchBar.component'; 
 
-const Tab = () => {
-  const [activeTab, setActiveTab] = useState('All'); // Set default tab to 'All'
+const Places = () => {
+  const [activeTab, setActiveTab] = useState('All'); 
   const [searchQuery, setSearchQuery] = useState('');
   const [price, setPrice] = useState('');
   const [rating, setRating] = useState('');
   const [location, setLocation] = useState('');
+  
+  const navigate = useNavigate();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -28,22 +31,22 @@ const Tab = () => {
     }
 
     if (price) {
-      // Implement price filter if applicable
-      // This assumes price in `places` data matches 'low', 'medium', 'high'
       filteredPlaces = filteredPlaces.filter(place => place.priceRange === price);
     }
 
     if (rating) {
-      filteredPlaces = filteredPlaces.filter(place => place.rating >= parseInt(rating));
+      filteredPlaces = filteredPlaces.filter(place => place.rating >= parseInt(rating, 10));
     }
 
     if (location) {
-      // Implement location filter if applicable
-      // This filter assumes location is a part of place data
       filteredPlaces = filteredPlaces.filter(place => place.location.toLowerCase().includes(location.toLowerCase()));
     }
 
     return filteredPlaces;
+  };
+
+  const handleMoreDetailsClick = (place) => {
+    navigate(`/places/${place.id}`);
   };
 
   return (
@@ -87,17 +90,19 @@ const Tab = () => {
               <div className="w-3/4 mx-auto">
                 {filterPlaces(category).length > 0 ? (
                   filterPlaces(category).map((place) => (
-                    <Item
-                      key={place.id}
-                      title={place.name}
-                      rating={place.rating}
-                      priceRange={place.priceRange} // Ensure this is available in your places data
-                      imageSrc={place.image} // Ensure this is available in your places data
-                      category={place.category} // Ensure this is available in your places data
-                    />
+                    <div key={place.id} className="mb-4">
+                      <Item
+                        imgSrc={place.image}
+                        title={place.name}
+                        name={place.name}
+                        rating={place.rating}
+                        priceRange={place.priceRange}
+                        onClick={() => handleMoreDetailsClick(place)}
+                      />
+                    </div>
                   ))
                 ) : (
-                  <p>No places available.</p>
+                  <p>No places found for this category.</p>
                 )}
               </div>
             </div>
@@ -108,4 +113,4 @@ const Tab = () => {
   );
 };
 
-export default Tab;
+export default Places;
