@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import places from '../services/places.data';
 import Item from './CardItem.component';
@@ -17,11 +17,12 @@ const Places = () => {
     setActiveTab(tab);
   };
 
-  const filterPlaces = (category) => {
+  // Memoize filtered places to prevent unnecessary recalculations
+  const filteredPlaces = useMemo(() => {
     let filteredPlaces = places;
 
-    if (category !== 'All') {
-      filteredPlaces = filteredPlaces.filter(place => place.category === category);
+    if (activeTab !== 'All') {
+      filteredPlaces = filteredPlaces.filter(place => place.category === activeTab);
     }
 
     if (searchQuery) {
@@ -43,7 +44,7 @@ const Places = () => {
     }
 
     return filteredPlaces;
-  };
+  }, [activeTab, searchQuery, price, rating, location]);
 
   const handleMoreDetailsClick = (place) => {
     navigate(`/places/${place.id}`);
@@ -87,9 +88,9 @@ const Places = () => {
           activeTab === category && (
             <div key={category}>
               <h2 className="w-3/4 mx-auto text-xl font-semibold">{category}</h2>
-              <div className="w-3/4 mx-auto">
-                {filterPlaces(category).length > 0 ? (
-                  filterPlaces(category).map((place) => (
+              <div className="w-3/4 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"> {/* Added xl:grid-cols-5 */}
+                {filteredPlaces.length > 0 ? (
+                  filteredPlaces.map((place) => (
                     <div key={place.id} className="mb-4">
                       <Item
                         imgSrc={place.image}

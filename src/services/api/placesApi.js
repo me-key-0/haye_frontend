@@ -24,7 +24,7 @@ export const searchPlaces = async (query, price, rating, location) => {
 // Fetch a place by ID
 export const fetchPlaceById = async (id) => {
   try {
-    const response = await axiosInstance.get(`/api/places/${id}`);
+    const response = await axiosInstance.get(`/places/${id}`);
     return response.data;
   } catch (error) {
     console.error('Fetch place by ID error:', error);
