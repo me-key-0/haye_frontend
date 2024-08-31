@@ -1,23 +1,39 @@
-import { useState, useMemo} from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import places from '../services/places.data';
 import Item from './CardItem.component';
-import SearchBar from './SearchBar.component'; 
+import SearchBar from './SearchBar.component';
+import { addPlaceToFavorite, removePlaceFromFavorite} from '../redux/Slices/placesSlice';
+import { addFavorite, removeFavorite } from '../redux/Slices/userSlice';
 
 const Places = () => {
-  const [activeTab, setActiveTab] = useState('All'); 
+  const [activeTab, setActiveTab] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [price, setPrice] = useState('');
   const [rating, setRating] = useState('');
   const [location, setLocation] = useState('');
-  
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const favorites = useSelector((state) => state.user.favorites);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const place = useSelector((state) => state.places.place);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  // Memoize filtered places to prevent unnecessary recalculations
+  const handleFavoriteClick = () => {
+    if (favorites.find(fav => fav.id === place.id)) {
+      dispatch(removePlaceFromFavorite(place.id));
+      dispatch(removeFavorite(place.id));
+    } else {
+      dispatch(addPlaceToFavorite(place.id));
+      dispatch(addFavorite({ id: place.id, ...place }));
+    }
+  };
+
   const filteredPlaces = useMemo(() => {
     let filteredPlaces = places;
 
@@ -48,6 +64,7 @@ const Places = () => {
 
   const handleMoreDetailsClick = (place) => {
     navigate(`/places/${place.id}`);
+
   };
 
   return (
@@ -82,29 +99,26 @@ const Places = () => {
         </ul>
       </div>
 
-      {/* Tab Content */}
       <div className="mt-4">
         {['All', 'Hotels', 'Restaurants', 'Cafes', 'Lounges'].map((category) => (
           activeTab === category && (
             <div key={category}>
               <h2 className="w-3/4 mx-auto text-xl font-semibold">{category}</h2>
-              <div className="w-3/4 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"> {/* Added xl:grid-cols-5 */}
-                {filteredPlaces.length > 0 ? (
-                  filteredPlaces.map((place) => (
-                    <div key={place.id} className="mb-4">
-                      <Item
-                        imgSrc={place.image}
-                        title={place.name}
-                        name={place.name}
-                        rating={place.rating}
-                        priceRange={place.priceRange}
-                        onClick={() => handleMoreDetailsClick(place)}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <p>No places found for this category.</p>
-                )}
+              <div className="w-3/4 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+                {filteredPlaces.map((place) => (
+                  <Item
+                    key={place.id}
+                    imgSrc={place.imgSrc}
+                    title={place.title}
+                    name={place.name}
+                    rating={place.rating}
+                    priceRange={place.priceRange}
+                    onMoreDetailsClick={() => handleMoreDetailsClick(place.id)}
+                    onFavoriteClick={() => handleFavoriteClick(place.id)}
+                    isFavorited={favorites.some((fav) => fav.id === place.id)}
+                    isAuthenticated={isAuthenticated}
+                  />
+                ))}
               </div>
             </div>
           )

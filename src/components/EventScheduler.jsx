@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import CustomButton from '../components/CustomButton.component';
 import FormInput from '../components/FormInput.component';
 
@@ -7,6 +8,7 @@ const EventScheduler = ({ events }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [scheduleDate, setScheduleDate] = useState('');
   const [scheduleLocation, setScheduleLocation] = useState('');
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const handleEventChange = (e) => {
     const event = events.find(event => event.id === e.target.value);
@@ -23,13 +25,16 @@ const EventScheduler = ({ events }) => {
 
   const handleScheduleSubmit = (e) => {
     e.preventDefault();
-    // Add your scheduling logic here, e.g., API call to Google Calendar or backend server
     console.log('Event Scheduled:', {
       event: selectedEvent,
       date: scheduleDate,
       location: scheduleLocation
     });
   };
+
+  if (!isAuthenticated) {
+    return <p>Please sign in to schedule events.</p>;
+  }
 
   return (
     <div id="event-scheduler" className="mt-8">
@@ -43,7 +48,7 @@ const EventScheduler = ({ events }) => {
           className="block w-full p-2 text-black border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600"
         >
           <option value="">--Select an Event--</option>
-          {events.map(event => (
+          {(events || []).map(event => (
             <option key={event.id} value={event.id}>{event.name}</option>
           ))}
         </select>

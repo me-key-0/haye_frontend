@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
+import { CheckAuth } from '../services/auth/CheckAuth'; // Adjust the import path as needed
 
-export function Item({ imgSrc, title, name, rating, priceRange, onAddToFavorites, onClick }) {
+export function Item({ imgSrc, title, name, rating, priceRange, onMoreDetailsClick, onFavoriteClick, isFavorited }) {
+  const { isAuthenticated } = CheckAuth();
+
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -19,16 +22,34 @@ export function Item({ imgSrc, title, name, rating, priceRange, onAddToFavorites
     return stars;
   };
 
+  const handleMoreDetailsClick = () => {
+    if (isAuthenticated) {
+      onMoreDetailsClick();
+    } else {
+      // Handle unauthenticated case, e.g., show a login prompt
+      alert('Please sign in to view more details.');
+    }
+  };
+
+  const handleFavoriteClick = () => {
+    if (isAuthenticated) {
+      onFavoriteClick();
+    } else {
+      // Handle unauthenticated case, e.g., show a login prompt
+      alert('Please sign in to add to favorites.');
+    }
+  };
+
   return (
     <div className="relative w-full max-w-xs sm:max-w-[160px] bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden m-2">
       <div className="relative w-full h-40">
         <img src={imgSrc} alt={title} className="object-cover h-full w-full" />
         <button
-          onClick={onAddToFavorites}
+          onClick={handleFavoriteClick}
           className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
         >
           <svg
-            className="h-5 w-5"
+            className={`h-5 w-5 ${isFavorited ? 'text-red-500' : 'text-gray-500'}`}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +72,7 @@ export function Item({ imgSrc, title, name, rating, priceRange, onAddToFavorites
         <div className="flex justify-between items-center mt-3">
           <span className="text-sm font-bold text-gray-900">Price: {priceRange}</span>
           <button
-            onClick={onClick}
+            onClick={handleMoreDetailsClick}
             className="rounded-lg bg-cyan-700 px-2 py-1 text-center text-xs font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300"
           >
             Details
@@ -64,16 +85,18 @@ export function Item({ imgSrc, title, name, rating, priceRange, onAddToFavorites
 
 Item.propTypes = {
   imgSrc: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired, 
+  name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
   priceRange: PropTypes.string.isRequired,
-  onAddToFavorites: PropTypes.func,
-  onClick: PropTypes.func
+  onMoreDetailsClick: PropTypes.func.isRequired,
+  onFavoriteClick: PropTypes.func.isRequired,
+  isFavorited: PropTypes.bool,
 };
 
 Item.defaultProps = {
-  onAddToFavorites: () => {},
+  isFavorited: false,
 };
 
 export default Item;
+ 
