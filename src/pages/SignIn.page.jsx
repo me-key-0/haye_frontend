@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { emailSignInStart, googleSignInStart } from '../redux/Slices/authSlice';
+import { emailSignInStart, googleSignInStart } from '../redux/Slices/userSlice';
 import FormInput from "../components/FormInput.component";
 import CustomButton from "../components/CustomButton.component";
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ const SignIn = () => {
   const [localError, setLocalError] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.auth);
+  const { status, error } = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();

@@ -3,21 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FormInput from '../components/FormInput.component';
 import CustomButton from '../components/CustomButton.component';
-import { signUpStart } from '../redux/Slices/authSlice';
+import { signUpStart } from '../redux/Slices/userSlice';
 
 const SignUp = () => {
-    const [username, setUsername] = useState('');
+    const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { status, error } = useSelector((state) => state.auth);
+    const { status, error } = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (status === 'succeeded' && !error) {
-            navigate('/signup/otp'); // Redirect to OTP page
+        if (status === 'Loading' && !error) {
+            navigate('/otp'); // Redirect to OTP page
         }
     }, [status, error, navigate]);
 
@@ -29,7 +29,7 @@ const SignUp = () => {
             return;
         }
 
-        dispatch(signUpStart({ username, email, password }));
+        dispatch(signUpStart({ displayName, email, password }));
     };
 
     return (
@@ -55,11 +55,11 @@ const SignUp = () => {
                         <div className="space-y-3">
                             <FormInput
                                 type="text"
-                                name="username"
-                                id="username"
-                                placeholder="User Name"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                name="displayName"
+                                id="displayName"
+                                placeholder="Display Name"
+                                value={displayName}
+                                onChange={(e) => setDisplayName(e.target.value)}
                                 required
                             />
                             <FormInput

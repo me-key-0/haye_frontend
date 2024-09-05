@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: "https://haye-backend.onrender.com/",
+  baseURL: 'http://localhost:5000', 
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 

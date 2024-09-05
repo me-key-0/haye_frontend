@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, TextField, Typography } from '@mui/material';
-import { verifyOtpStart } from '../redux/Slices/authSlice';
+import { verifyOtpStart } from '../redux/Slices/userSlice';
 
 import CustomButton  from '../components/CustomButton.component';
 

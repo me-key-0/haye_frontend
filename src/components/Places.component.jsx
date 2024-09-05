@@ -1,44 +1,27 @@
-import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import places from '../services/places.data';
 import Item from './CardItem.component';
-import SearchBar from './SearchBar.component';
-import { addPlaceToFavorite, removePlaceFromFavorite} from '../redux/Slices/placesSlice';
-import { addFavorite, removeFavorite } from '../redux/Slices/userSlice';
+import SearchBar from './SearchBar.component'; 
 
 const Places = () => {
-  const [activeTab, setActiveTab] = useState('All');
+  const [activeTab, setActiveTab] = useState('All'); 
   const [searchQuery, setSearchQuery] = useState('');
   const [price, setPrice] = useState('');
   const [rating, setRating] = useState('');
   const [location, setLocation] = useState('');
-
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const favorites = useSelector((state) => state.user.favorites);
-  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
-  const place = useSelector((state) => state.places.place);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleFavoriteClick = () => {
-    if (favorites.find(fav => fav.id === place.id)) {
-      dispatch(removePlaceFromFavorite(place.id));
-      dispatch(removeFavorite(place.id));
-    } else {
-      dispatch(addPlaceToFavorite(place.id));
-      dispatch(addFavorite({ id: place.id, ...place }));
-    }
-  };
-
-  const filteredPlaces = useMemo(() => {
+  const filterPlaces = (category) => {
     let filteredPlaces = places;
 
-    if (activeTab !== 'All') {
-      filteredPlaces = filteredPlaces.filter(place => place.category === activeTab);
+    if (category !== 'All') {
+      filteredPlaces = filteredPlaces.filter(place => place.category === category);
     }
 
     if (searchQuery) {
@@ -60,11 +43,10 @@ const Places = () => {
     }
 
     return filteredPlaces;
-  }, [activeTab, searchQuery, price, rating, location]);
+  };
 
   const handleMoreDetailsClick = (place) => {
     navigate(`/places/${place.id}`);
-
   };
 
   return (
@@ -99,26 +81,29 @@ const Places = () => {
         </ul>
       </div>
 
+      {/* Tab Content */}
       <div className="mt-4">
         {['All', 'Hotels', 'Restaurants', 'Cafes', 'Lounges'].map((category) => (
           activeTab === category && (
             <div key={category}>
               <h2 className="w-3/4 mx-auto text-xl font-semibold">{category}</h2>
-              <div className="w-3/4 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                {filteredPlaces.map((place) => (
-                  <Item
-                    key={place.id}
-                    imgSrc={place.imgSrc}
-                    title={place.title}
-                    name={place.name}
-                    rating={place.rating}
-                    priceRange={place.priceRange}
-                    onMoreDetailsClick={() => handleMoreDetailsClick(place.id)}
-                    onFavoriteClick={() => handleFavoriteClick(place.id)}
-                    isFavorited={favorites.some((fav) => fav.id === place.id)}
-                    isAuthenticated={isAuthenticated}
-                  />
-                ))}
+              <div className="w-3/4 mx-auto">
+                {filterPlaces(category).length > 0 ? (
+                  filterPlaces(category).map((place) => (
+                    <div key={place.id} className="mb-4">
+                      <Item
+                        imgSrc={place.image}
+                        title={place.name}
+                        name={place.name}
+                        rating={place.rating}
+                        priceRange={place.priceRange}
+                        onClick={() => handleMoreDetailsClick(place)}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p>No places found for this category.</p>
+                )}
               </div>
             </div>
           )
