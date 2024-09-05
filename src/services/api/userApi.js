@@ -40,6 +40,7 @@ export const signUpUser = async (credentials) => {
 export const signOutUser = () => {
   return axiosInstance.post('users/logout'); // Call the backend logout endpoint
 };
+
 export const verifyOtp = () => {
   return axiosInstance.post('user/verify')
 }
