@@ -28,13 +28,9 @@ export const signInUser = async (credentials) => {
 };
 
 
-export const signUpUser = async (displayName, email, password) => {
+export const signUpUser = async (credentials) => {
   try {
-      const response = await axiosInstance.post('/users/register', {
-          displayName,
-          email,
-          password,
-      });
+      const response = await axiosInstance.post('/users/register', credentials);
       return response.data;
   } catch (error) {
       throw error.response ? error.response.data : new Error('Network error');
@@ -44,3 +40,7 @@ export const signUpUser = async (displayName, email, password) => {
 export const signOutUser = () => {
   return axiosInstance.post('users/logout'); // Call the backend logout endpoint
 };
+
+export const verifyOtp = () => {
+  return axiosInstance.post('user/verify')
+}

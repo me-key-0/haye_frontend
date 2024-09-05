@@ -1,12 +1,27 @@
-import PropTypes from 'prop-types'; 
-import { useState } from 'react';// Import PropTypes
+import PropTypes from 'prop-types';
+import { useState, useRef, useEffect } from 'react';
 
 const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRating, location, setLocation }) => {
   const [filterOpen, setFilterOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleSearch = () => {
-    // The parent component (Tab) will handle filtering based on these values
+
+  }
+  const handleDropdownToggle = () => {
+    setFilterOpen(!filterOpen);
   };
+
+  const handleOutsideClick = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setFilterOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
 
   return (
     <div className="w-3/4 mx-auto p-4 bg-white rounded-lg">
@@ -30,7 +45,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRa
 
         <div className="relative ml-4">
           <button
-            onClick={() => setFilterOpen(!filterOpen)}
+            onClick={handleDropdownToggle}
             className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg"
           >
             Filters
@@ -40,7 +55,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRa
           </button>
 
           {filterOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-300 rounded-lg">
+            <div ref={dropdownRef} className="absolute right-0 mt-2 w-56 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
               <div className="p-4">
                 <h3 className="text-sm font-medium text-gray-900">Price</h3>
                 <select
@@ -61,11 +76,9 @@ const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRa
                   className="block w-full mt-1 py-2 pl-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base bg-white"
                 >
                   <option value="">Any</option>
-                  <option value="1">1 Star</option>
-                  <option value="2">2 Stars</option>
-                  <option value="3">3 Stars</option>
-                  <option value="4">4 Stars</option>
-                  <option value="5">5 Stars</option>
+                
+                  <option value="3"> Below 3 Stars</option>
+                  <option value="4"> Above 4 Stars</option>
                 </select>
 
                 <h3 className="mt-4 text-sm font-medium text-gray-900">Location</h3>
