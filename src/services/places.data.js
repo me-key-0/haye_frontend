@@ -4,7 +4,7 @@ const places = [
     id: '1',
     name: 'Sheraton Addis',
     category: 'Hotels',
-    image: 'https://example.com/sheraton-addis.jpg',
+    image: 'https://example.com/sheraton-addhttps://journeysbydesign.com/wp-content/uploads/2017/02/Addis-Sheraton-Pool-Area.jpgis.jpg',
     priceRange: 'high',
     rating: 4.7,
     location: 'Addis Ababa',
@@ -78,7 +78,7 @@ const places = [
     category: 'Lounges',
     image: 'https://example.com/rooftop-lounge.jpg',
     priceRange: 'high',
-    rating: 4.5,
+    rating: 2.5,
     location: 'Addis Ababa',
     description: 'Elegant rooftop lounge with a sophisticated atmosphere and an extensive drink menu.'
   },
@@ -88,7 +88,7 @@ const places = [
     category: 'Lounges',
     image: 'https://example.com/chill-out-lounge.jpg',
     priceRange: 'medium',
-    rating: 4.1,
+    rating: 3.1,
     location: 'Addis Ababa',
     description: 'Casual lounge ideal for unwinding, with a variety of beverages and a comfortable setting.'
   },
@@ -119,7 +119,7 @@ const places = [
     category: 'Cafes',
     image: 'https://example.com/coffee-house.jpg',
     priceRange: 'medium',
-    rating: 4.4,
+    rating: 2.4,
     location: 'Addis Ababa',
     description: 'Modern cafe offering a variety of coffee blends and comfortable seating for working or socializing.'
   },

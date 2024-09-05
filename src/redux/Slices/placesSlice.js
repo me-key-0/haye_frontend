@@ -1,9 +1,11 @@
 // src/redux/Slices/placesSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { addFavorite, removeFavorite } from './userSlice';
 
 const initialState = {
   allPlaces: [],
   place: null,
+  favorites: [],
   loading: false,
   error: null,
 };
@@ -44,7 +46,28 @@ const placesSlice = createSlice({
     },
     setAllPlaces(state, action) {
       state.allPlaces = action.payload;
+      
     },
+    addPlaceToFavorite(state, action) {
+      const placeId = action.payload;
+      //console.log(placeId)
+      const place = state.allPlaces.find(p => p.id === placeId);
+      if (place) {
+        place.isFavorited = true;
+        // Dispatch action to update user slice
+        addFavorite({ id: placeId, ...place}); 
+      }
+    },
+    removePlaceFromFavorite(state, action) {
+      const placeId = action.payload;
+      const place = state.places.find(p => p.id === placeId);
+      if (place) {
+        place.isFavorite = false;
+        // Dispatch action to update user slice
+        removeFavorite(placeId);
+      }
+    },
+    
   },
 });
 
@@ -58,7 +81,13 @@ export const {
   searchPlacesFailure,
   fetchPlaceByIdRequest,
   fetchPlaceByIdSuccess,
-  fetchPlaceByIdFailure
+  fetchPlaceByIdFailure,
+  addPlaceToFavorite,
+  removePlaceFromFavorite,
+  fetchUserFavoritesStart,
+  fetchUserFavoritesSuccess,
+  fetchUserFavoritesFailure
+
 } = placesSlice.actions;
 
 export default placesSlice.reducer;

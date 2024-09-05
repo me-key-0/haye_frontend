@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { emailSignInStart, googleSignInStart } from '../redux/Slices/userSlice';
+import { emailSignInStart, googleSignInStart } from '../redux/Slices/authSlice';
 import FormInput from "../components/FormInput.component";
 import CustomButton from "../components/CustomButton.component";
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ const SignIn = () => {
   const [localError, setLocalError] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.user);
+  const { status, error } = useSelector((state) => state.auth);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -94,3 +94,4 @@ const SignIn = () => {
 };
 
 export default SignIn;
+/* this is my sign in page i want to sign in based on roles admin and user and if signed in as an admin the profile icon on the header will redirect to admin dashboard that contains functionalities like adding, updating, removing, places and events and and also I want the user to be able to give reviews and those reviews saved, plus when signing in a user can have functionalites of forgot password */

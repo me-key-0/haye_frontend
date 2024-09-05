@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { fetchAllPlaces as fetchAllPlacesApi } from '../../services/api/placesApi'; // Import the API function
 
+
 import { fetchAllPlacesRequest, 
   fetchAllPlacesSuccess, 
   fetchAllPlacesFailure,
@@ -9,7 +10,11 @@ import { fetchAllPlacesRequest,
   searchPlacesFailure,
   fetchPlaceByIdFailure,
   fetchPlaceByIdRequest,
-  fetchPlaceByIdSuccess } from '../Slices/placesSlice';
+  fetchPlaceByIdSuccess,
+ // fetchUserFavoritesStart,
+  //fetchUserFavoritesSuccess,
+  //fetchUserFavoritesFailure, 
+  } from '../Slices/placesSlice';
 import { searchPlaces , fetchPlaceById } from '../../services/api/placesApi';
 
 
@@ -45,12 +50,21 @@ function* fetchPlaceByIdSaga(action) {
     yield put(fetchPlaceByIdFailure(error.message));
   }
 }
+/*function* fetchUserFavoritesSaga(action) {
+  try {
+    const response = yield call(action.payload);
+    yield put(fetchUserFavoritesSuccess(response.data));
+  } catch (error) {
+    yield put(fetchUserFavoritesFailure(error.message));
+  }
+}*/
 
 // Watcher Saga: watches for actions dispatched to the store
 export function* placesSaga() {
   yield takeEvery(fetchAllPlacesRequest.type, fetchAllPlacesSaga);
   yield takeEvery(searchPlacesRequest.type, searchPlacesSaga);
   yield takeEvery(fetchPlaceByIdRequest.type, fetchPlaceByIdSaga);
+//  yield takeEvery(fetchUserFavoritesStart.type, fetchUserFavoritesSaga);
 
 
 }

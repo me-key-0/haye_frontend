@@ -1,27 +1,51 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import places from '../services/places.data';
 import Item from './CardItem.component';
-import SearchBar from './SearchBar.component'; 
+import SearchBar from './SearchBar.component';
+import { setAllPlaces ,addPlaceToFavorite, removePlaceFromFavorite} from '../redux/Slices/placesSlice';
+import { addFavorite, removeFavorite,  } from '../redux/Slices/userSlice';
 
 const Places = () => {
-  const [activeTab, setActiveTab] = useState('All'); 
+  const [activeTab, setActiveTab] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [price, setPrice] = useState('');
   const [rating, setRating] = useState('');
   const [location, setLocation] = useState('');
-  
-  const navigate = useNavigate();
 
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const favorites = useSelector((state) => state.places.favorites);
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  dispatch(setAllPlaces(places));
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const filterPlaces = (category) => {
+  const handleFavoriteClick = (placeId) => {
+    const currentPlace = places.find(place => place.id === placeId);
+  
+    if (currentPlace) {
+      if (favorites.find(fav => fav.id === currentPlace.id)) {
+        dispatch(removePlaceFromFavorite(currentPlace.id));
+        dispatch(removeFavorite(currentPlace.id));
+      } else {
+        dispatch(addPlaceToFavorite(currentPlace.id));
+        dispatch(addFavorite({ id: currentPlace.id, ...currentPlace }));
+      }
+    }
+  };
+  
+  
+
+  const filteredPlaces = useMemo(() => {
     let filteredPlaces = places;
 
-    if (category !== 'All') {
-      filteredPlaces = filteredPlaces.filter(place => place.category === category);
+    if (activeTab !== 'All') {
+      filteredPlaces = filteredPlaces.filter(place => place.category === activeTab);
     }
 
     if (searchQuery) {
@@ -43,10 +67,11 @@ const Places = () => {
     }
 
     return filteredPlaces;
-  };
+  }, [activeTab, searchQuery, price, rating, location]);
 
   const handleMoreDetailsClick = (place) => {
     navigate(`/places/${place.id}`);
+
   };
 
   return (
@@ -81,29 +106,26 @@ const Places = () => {
         </ul>
       </div>
 
-      {/* Tab Content */}
       <div className="mt-4">
         {['All', 'Hotels', 'Restaurants', 'Cafes', 'Lounges'].map((category) => (
           activeTab === category && (
             <div key={category}>
               <h2 className="w-3/4 mx-auto text-xl font-semibold">{category}</h2>
-              <div className="w-3/4 mx-auto">
-                {filterPlaces(category).length > 0 ? (
-                  filterPlaces(category).map((place) => (
-                    <div key={place.id} className="mb-4">
-                      <Item
-                        imgSrc={place.image}
-                        title={place.name}
-                        name={place.name}
-                        rating={place.rating}
-                        priceRange={place.priceRange}
-                        onClick={() => handleMoreDetailsClick(place)}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <p>No places found for this category.</p>
-                )}
+              <div className="w-3/4 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+                {filteredPlaces.map((place) => (
+                  <Item
+                    key={place.id}
+                    imgSrc={place.imgSrc}
+                    title={place.title}
+                    name={place.name}
+                    rating={place.rating}
+                    priceRange={place.priceRange}
+                    onMoreDetailsClick={() => handleMoreDetailsClick(place.id)}
+                    onFavoriteClick={() => handleFavoriteClick(place.id)}
+                    isFavorited={favorites.some((fav) => fav.id === place.id)}
+                    isAuthenticated={isAuthenticated}
+                  />
+                ))}
               </div>
             </div>
           )

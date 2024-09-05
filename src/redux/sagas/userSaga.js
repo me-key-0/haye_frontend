@@ -4,131 +4,86 @@ import {
   fetchAllUsersRequest,
   fetchAllUsersSuccess,
   fetchAllUsersFailure,
-  googleSignInStart,
-  emailSignInStart,
-  signInSuccess,
-  signInFailure,
-  signOutStart,
-  signOutSuccess,
-  signOutFailure,
-  signUpStart,
-  signUpSuccess,
-  signUpFailure,
-  verifyOtpSuccess,
-  verifyOtpFailure,
-  verifyOtpStart,
+  fetchScheduledEventsStart,
+  fetchScheduledEventsSuccess,
+  fetchScheduledEventsFailure,
+  fetchUserFavoritesStart,
+  fetchUserFavoritesSuccess,
+  fetchUserFavoritesFailure,
+  fetchUserProfileStart,
+  fetchUserProfileSuccess,
+  fetchUserProfileFailure,
+  updateUserProfileStart,
+  updateUserProfileSuccess,
+  updateUserProfileFailure,
+  setUserAuthenticated
 } from '../Slices/userSlice';
 
-import { signInWithGoogle } from '../../firebase'; // Import your Google sign-in function
-import { signInUser, signUpUser, signOutUser } from '../../services/api/userApi';
-import { signOutFromGoogle } from '../../firebase';
-
-function* signInWithGoogleSaga() {
-  try {
-    console.log("Starting Google sign-in...");
-    const userCredential = yield call(signInWithGoogle);
-    const user = userCredential.user;
-    const data = {
-      accessToken: user.accessToken,
-      user: {
-        email: user.email,
-        displayName: user.displayName,
-        uid: user.uid,
-        signInMethod: 'google',
-      }
-    };
-    yield put(signInSuccess(data));
-    console.log("Google sign-in successful");
-  } catch (error) {
-    console.error("Google sign-in failed:", error);
-    yield put(signInFailure(error.message));
-  }
-}
-
-function* signInWithEmailSaga(action) {
-  try {
-    console.log("Starting email sign-in...");
-    const { email, password } = action.payload;
-    const data = yield call(signInUser, { email, password });
-    yield put(signInSuccess({ ...data, signInMethod: 'email' }));
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    console.log("Email sign-in successful");
-  } catch (error) {
-    console.error("Email sign-in failed:", error);
-    yield put(signInFailure(error.message));
-  }
-}
-
-function* signUpSaga(action) {
-  try {
-    console.log("Starting sign-up...");
-    const { displayName, email, password } = action.payload;
-    const data = yield call(signUpUser, { displayName, email, password });
-    yield put(signUpSuccess({ currentUser: data }));
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    yield put(signInSuccess(data));
-    console.log("Sign-up successful");
-  } catch (error) {
-    console.error("Sign-up failed:", error);
-    yield put(signUpFailure(error.message));
-  }
-}
-
-function* signOutSaga(action) {
-  try {
-    console.log("Starting sign-out process...");
-    const { signInMethod } = action.payload.currentUser;
-
-    if (signInMethod === 'google') {
-      yield call(signOutFromGoogle);
-    } else if (signInMethod === 'email') {
-      yield call(signOutUser);
-    }
-
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
-    
-    yield put(signOutSuccess());
-    console.log("Sign-out successful, user signed out.");
-  } catch (error) {
-    console.error("Sign-out failed:", error);
-    yield put(signOutFailure(error.message));
-  }
-}
-
-function* verifyOtpSaga(action) {
-  try {
-    console.log("Starting OTP verification...");
-    const response = yield call(axios.post, '/api/verify-otp', action.payload);
-    yield put(verifyOtpSuccess(response.data));
-    console.log("OTP verification successful");
-  } catch (error) {
-    console.error("OTP verification failed:", error);
-    yield put(verifyOtpFailure(error.message));
-  }
-}
+import { CheckAuth } from '../../services/auth/CheckAuth';
 
 function* fetchAllUsersSaga() {
   try {
-    console.log("Fetching all users...");
     const response = yield call(axios.get, '/api/users');
     yield put(fetchAllUsersSuccess(response.data));
-    console.log("Fetched all users successfully");
   } catch (error) {
-    console.error("Fetching all users failed:", error);
     yield put(fetchAllUsersFailure(error.message));
   }
 }
 
+function* fetchUserProfileSaga(action) {
+  try {
+    const response = yield call(axios.get, `/api/users/${action.payload}/profile`);
+    yield put(fetchUserProfileSuccess(response.data));
+  } catch (error) {
+    yield put(fetchUserProfileFailure(error.message));
+  }
+}
+
+function* updateUserProfileSaga(action) {
+  try {
+    const { userId, updatedData } = action.payload;
+    const response = yield call(axios.put, `/api/users/${userId}`, updatedData);
+    yield put(updateUserProfileSuccess(response.data));
+  } catch (error) {
+    yield put(updateUserProfileFailure(error.message));
+  }
+}
+
+function* fetchUserFavoritesSaga(action) {
+  try {
+    const response = yield call(axios.get, `/api/users/${action.payload}/favorites`);
+    yield put(fetchUserFavoritesSuccess(response.data));
+  } catch (error) {
+    yield put(fetchUserFavoritesFailure(error.message));
+  }
+}
+
+function* isUserAuthenticatedSaga() {
+  try {
+    const isAuthenticated = yield call(CheckAuth);
+    yield put(setUserAuthenticated(isAuthenticated));
+  } catch (error) {
+    console.error('Error checking user authentication:', error);
+  }
+}
+
+function* fetchScheduledEventsSaga(action) {
+  try {
+    const response = yield call(axios.get, `/api/events/scheduled/${action.payload}`);
+    yield put(fetchScheduledEventsSuccess(response.data));
+  } catch (error) {
+    yield put(fetchScheduledEventsFailure(error.message));
+  }
+}
+
 export function* userSaga() {
+ 
   yield all([
     takeEvery(fetchAllUsersRequest.type, fetchAllUsersSaga),
-    takeEvery(googleSignInStart.type, signInWithGoogleSaga),
-    takeEvery(emailSignInStart.type, signInWithEmailSaga),
-    takeEvery(signOutStart.type, signOutSaga),
-    takeEvery(signUpStart.type, signUpSaga),
-    takeEvery(verifyOtpStart.type, verifyOtpSaga)
-  ]);
+    takeEvery(fetchScheduledEventsStart.type, fetchScheduledEventsSaga),
+    takeEvery(fetchUserFavoritesStart.type, fetchUserFavoritesSaga),
+    takeEvery(fetchUserProfileStart.type, fetchUserProfileSaga),
+    takeEvery(updateUserProfileStart.type, updateUserProfileSaga),
+    takeEvery(setUserAuthenticated.type, isUserAuthenticatedSaga)
+  ]); 
 }
