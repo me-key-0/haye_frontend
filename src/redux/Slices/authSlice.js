@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { addFavorite, removeFavorite } from './userSlice';
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    token: null,       
+    token: null,  
+         
     currentUser: null,        
     isAuthenticated: false, 
     status: 'idle',    
@@ -19,7 +21,8 @@ const authSlice = createSlice({
     },
     signInSuccess: (state, action) => {
       state.status = 'succeeded';
-      state.token = action.payload.token;
+      console.log(action.payload)
+      state.token = action.payload.accessToken;
       state.currentUser = action.payload.user;
       state.isAuthenticated = true;
      
@@ -80,7 +83,27 @@ const authSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload.error;
     },
+    extraReducers: (builder) => {
+      builder
+        .addCase(addFavorite, (state, action) => {
+          const placeId = action.payload.id;
+          const place = state.allPlaces.find(p => p.id === placeId);
+          if (place) {
+            place.isFavorited = true;
+            state.favorites.push(place);
+          }
+        })
+        .addCase(removeFavorite, (state, action) => {
+          const placeId = action.payload;
+          const place = state.allPlaces.find(p => p.id === placeId);
+          if (place) {
+            place.isFavorited = false;
+            state.favorites = state.favorites.filter(p => p.id !== placeId);
+          }
+        });
+    }
   },
+  
 });
 
 export const {

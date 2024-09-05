@@ -4,7 +4,8 @@ import createSagaMiddleware from 'redux-saga';
 import userReducer from './Slices/userSlice';
 import placesReducer from './Slices/placesSlice';
 import authReducer from './Slices/authSlice';
-import eventsReducer from './Slices/eventsSlice'
+import eventsReducer from './Slices/eventsSlice';
+import adminReducer from './Slices/adminSlice'
 import { rootSaga } from './root-saga';
 
 // Create the saga middleware
@@ -16,7 +17,8 @@ const store = configureStore({
     user: userReducer,
     places: placesReducer,
     auth : authReducer,
-    events : eventsReducer
+    events : eventsReducer,
+    admin : adminReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),

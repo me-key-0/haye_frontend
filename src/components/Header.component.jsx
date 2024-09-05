@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchUserFavoritesStart,
   fetchScheduledEventsStart,
-  fetchUserProfileStart, // Import the action
+  fetchUserProfileStart,
+  setCurrentUser,
 } from '../redux/Slices/userSlice';
 import { signOutStart } from '../redux/Slices/authSlice';
-import { FaHeart, FaCalendarAlt, FaUser } from 'react-icons/fa'; // Import a user icon
+import { FaHeart, FaCalendarAlt, FaUser } from 'react-icons/fa';
 
 const Header = React.memo(() => {
   const location = useLocation();
@@ -17,8 +18,8 @@ const Header = React.memo(() => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.currentUser);
   const signOutStatus = useSelector((state) => state.auth.status);
-  const scheduledEvents = useSelector((state) => state.user.scheduledEvents);
-  const favorites = useSelector((state) => state.user.favorites);
+  const scheduledEvents = useSelector((state) => state.user.scheduledEvents); // Updated to state.user
+  const favorites = useSelector((state) => state.user.favorites); // Updated to state.user
 
   const [isFavoritesPopupVisible, setFavoritesPopupVisible] = useState(false);
   const [isEventsPopupVisible, setEventsPopupVisible] = useState(false);
@@ -43,7 +44,7 @@ const Header = React.memo(() => {
 
   const handleFetchUserProfile = useCallback(() => {
     if (currentUser) {
-      dispatch(fetchUserProfileStart(currentUser.id)); // Dispatch the action with user ID
+      dispatch(fetchUserProfileStart(currentUser.id));
     }
   }, [dispatch, currentUser]);
 
@@ -77,13 +78,10 @@ const Header = React.memo(() => {
   }, []);
 
   useEffect(() => {
-    if (signOutStatus === 'succeeded') {
-     // navigate('/signin');
-    }
     if (currentUser) {
-      // Optionally, you can fetch favorites and events here
-      // handleFetchFavorites();
-      // handleFetchScheduledEvents();
+      dispatch(setCurrentUser(currentUser));
+      //handleFetchFavorites();
+      //handleFetchScheduledEvents();
     }
   }, [
     signOutStatus,
@@ -91,12 +89,13 @@ const Header = React.memo(() => {
     currentUser,
     handleFetchFavorites,
     handleFetchScheduledEvents,
+    dispatch,
   ]);
 
   // Handler for Profile button click
   const handleProfileClick = () => {
-    handleFetchUserProfile(); // Dispatch the action to fetch user profile
-    navigate('/profile'); // Navigate to the profile page
+    handleFetchUserProfile();
+    navigate('/profile');
   };
 
   return (

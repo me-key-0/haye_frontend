@@ -5,6 +5,7 @@ import { addFavorite, removeFavorite } from './userSlice';
 const initialState = {
   allPlaces: [],
   place: null,
+  favorites: [],
   loading: false,
   error: null,
 };
@@ -45,17 +46,18 @@ const placesSlice = createSlice({
     },
     setAllPlaces(state, action) {
       state.allPlaces = action.payload;
+      
     },
     addPlaceToFavorite(state, action) {
       const placeId = action.payload;
-      const place = state.places.find(p => p.id === placeId);
+      //console.log(placeId)
+      const place = state.allPlaces.find(p => p.id === placeId);
       if (place) {
-        place.isFavorite = true;
+        place.isFavorited = true;
         // Dispatch action to update user slice
-        addFavorite({ id: placeId, ...place }); // Include place details as needed
+        addFavorite({ id: placeId, ...place}); 
       }
     },
-    // Example action for removing a favorite
     removePlaceFromFavorite(state, action) {
       const placeId = action.payload;
       const place = state.places.find(p => p.id === placeId);

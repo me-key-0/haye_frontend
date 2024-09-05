@@ -6,8 +6,8 @@ const userSlice = createSlice({
     isAuthenticated: false,
     currentUser: null,
     users: [],
-    favorites: ["favorite1", "favorite2"],
-    scheduledEvents: ["event1", "event2"],
+    favorites: [],
+    scheduledEvents: [],
     status: 'idle', // standardized status: 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
   },
@@ -91,12 +91,23 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     // Favorites fetch actions
-    addFavorite(state, action) {
-      state.favorites.push(action.payload);
-    },
+     addFavorite : (state, action) => {
+      const isFavorite = state.favorites.some(fav => fav.id === action.payload.id);
+      //console.log(action.payload.name)
+      //console.log(isFavorite)
+
+      if (!isFavorite) {
+        state.favorites.push(action.payload.name);
+      }
+    
+      //console.log("Updated state.favorites:", state.favorites);
+    }
+    ,
+    
     removeFavorite(state, action) {
-      state.favorites = state.favorites.filter(fav => fav.id !== action.payload);
+      state.favorites = state.favorites.filter(fav => fav.id !== action.payload); // Filter out the item
     },
+    
    
     updateUserProfileStart(state) {
       state.status = 'loading';
@@ -135,7 +146,10 @@ const userSlice = createSlice({
   setUserAuthenticated(state, action) {
     state.isAuthenticated = action.payload;
   },
- 
+  setCurrentUser(state,action) {
+    state.currentUser = action.payload;
+    state.isAuthenticated = true;
+  }
 }
 }); 
 
@@ -156,6 +170,7 @@ export const {
   fetchScheduledEventsSuccess,
   fetchScheduledEventsFailure,
   setUserAuthenticated,
+  setCurrentUser,
   addFavorite,
   removeFavorite
   

@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import places from '../services/places.data';
 import Item from './CardItem.component';
 import SearchBar from './SearchBar.component';
-import { addPlaceToFavorite, removePlaceFromFavorite} from '../redux/Slices/placesSlice';
-import { addFavorite, removeFavorite } from '../redux/Slices/userSlice';
+import { setAllPlaces ,addPlaceToFavorite, removePlaceFromFavorite} from '../redux/Slices/placesSlice';
+import { addFavorite, removeFavorite,  } from '../redux/Slices/userSlice';
 
 const Places = () => {
   const [activeTab, setActiveTab] = useState('All');
@@ -15,24 +15,31 @@ const Places = () => {
   const [location, setLocation] = useState('');
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const favorites = useSelector((state) => state.user.favorites);
+  const favorites = useSelector((state) => state.places.favorites);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const place = useSelector((state) => state.places.place);
-
+  
+  dispatch(setAllPlaces(places));
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleFavoriteClick = () => {
-    if (favorites.find(fav => fav.id === place.id)) {
-      dispatch(removePlaceFromFavorite(place.id));
-      dispatch(removeFavorite(place.id));
-    } else {
-      dispatch(addPlaceToFavorite(place.id));
-      dispatch(addFavorite({ id: place.id, ...place }));
+  const handleFavoriteClick = (placeId) => {
+    const currentPlace = places.find(place => place.id === placeId);
+  
+    if (currentPlace) {
+      if (favorites.find(fav => fav.id === currentPlace.id)) {
+        dispatch(removePlaceFromFavorite(currentPlace.id));
+        dispatch(removeFavorite(currentPlace.id));
+      } else {
+        dispatch(addPlaceToFavorite(currentPlace.id));
+        dispatch(addFavorite({ id: currentPlace.id, ...currentPlace }));
+      }
     }
   };
+  
+  
 
   const filteredPlaces = useMemo(() => {
     let filteredPlaces = places;

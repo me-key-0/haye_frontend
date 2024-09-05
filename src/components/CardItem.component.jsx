@@ -32,12 +32,12 @@ export function Item({ imgSrc, title, name, rating, priceRange, onMoreDetailsCli
   };
 
   const handleFavoriteClick = () => {
-    if (isAuthenticated) {
+  //  if (isAuthenticated) {
       onFavoriteClick();
-    } else {
+    //} else {
       // Handle unauthenticated case, e.g., show a login prompt
-      alert('Please sign in to add to favorites.');
-    }
+      //alert('Please sign in to add to favorites.');
+    //}
   };
 
   return (
@@ -84,9 +84,9 @@ export function Item({ imgSrc, title, name, rating, priceRange, onMoreDetailsCli
 }
 
 Item.propTypes = {
-  imgSrc: PropTypes.string.isRequired,
+  imgSrc: PropTypes.string,
   name: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   rating: PropTypes.number.isRequired,
   priceRange: PropTypes.string.isRequired,
   onMoreDetailsClick: PropTypes.func.isRequired,
@@ -94,9 +94,7 @@ Item.propTypes = {
   isFavorited: PropTypes.bool,
 };
 
-Item.defaultProps = {
-  isFavorited: false,
-};
+
 
 export default Item;
  

@@ -60,7 +60,7 @@ function* fetchUserFavoritesSaga(action) {
 
 function* isUserAuthenticatedSaga() {
   try {
-    const isAuthenticated = yield call(CheckAuth); // Your auth service logic
+    const isAuthenticated = yield call(CheckAuth);
     yield put(setUserAuthenticated(isAuthenticated));
   } catch (error) {
     console.error('Error checking user authentication:', error);
