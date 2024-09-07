@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     isAuthenticated: false,
+    token: null,
     currentUser: null,
     users: [],
     favorites: [],
@@ -92,7 +94,8 @@ const userSlice = createSlice({
     },
     // Favorites fetch actions
      addFavorite : (state, action) => {
-      const isFavorite = state.favorites.some(fav => fav.id === action.payload.id);
+    
+      const isFavorite = state.favorites.find(fav => fav.id === action.payload.id);
       //console.log(action.payload.name)
       //console.log(isFavorite)
 
@@ -100,7 +103,6 @@ const userSlice = createSlice({
         state.favorites.push(action.payload.name);
       }
     
-      //console.log("Updated state.favorites:", state.favorites);
     }
     ,
     
@@ -126,7 +128,7 @@ const userSlice = createSlice({
   },
   fetchUserFavoritesSuccess(state, action) {
     state.status = 'succeeded';
-    state.favorites = action.payload;
+    //state.favorites = action.payload;
   },
   fetchUserFavoritesFailure(state, action) {
     state.status = 'failed';
@@ -137,7 +139,7 @@ const userSlice = createSlice({
   },
   fetchScheduledEventsSuccess(state, action) {
     state.status = 'succeeded';
-    state.scheduledEvents = action.payload;
+    //state.scheduledEvents = action.payload;
   },
   fetchScheduledEventsFailure(state, action) {
     state.status = 'failed';
@@ -147,8 +149,9 @@ const userSlice = createSlice({
     state.isAuthenticated = action.payload;
   },
   setCurrentUser(state,action) {
-    state.currentUser = action.payload;
+    state.currentUser = action.payload.user;
     state.isAuthenticated = true;
+    state.token = action.payload.token
   }
 }
 }); 

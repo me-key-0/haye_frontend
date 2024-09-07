@@ -28,7 +28,7 @@ const ESection = ({ title, items, type }) => {
     if (type === 'place') {
       navigate(`/places/${itemId}`);
     } else if (type === 'event') {
-      navigate(`/events/schedule/${itemId}`);
+      navigate(`/events/${itemId}`);
     }
   };
 
@@ -36,19 +36,19 @@ const ESection = ({ title, items, type }) => {
     <div className="mb-8">
       <h3 className="text-xl font-bold mb-4">{title}</h3>
       <Carousel
-        swipeable={true}  // Allow swipe on touch devices
-        draggable={true}  // Allow drag on desktop
-        showDots={true}  // Display dots at the bottom
+        swipeable={true} 
+        draggable={true} 
+        showDots={false}  
         responsive={responsive}
-        ssr={true}  // Enable server-side rendering
-        infinite={true}  // Loop the carousel
-        autoPlay={true}  // Enable automatic sliding
-        autoPlaySpeed={2000}  // Speed of sliding (in milliseconds)
-        keyBoardControl={true}  // Allow keyboard controls
-        customTransition="transform 1000ms ease-in-out"  // Sliding transition effect
+        ssr={true}  
+        infinite={true}  
+        autoPlay={true}
+        autoPlaySpeed={3000}  
+        keyBoardControl={true} 
+        customTransition="transform 1000ms ease-in-out"  
         transitionDuration={1000}
         containerClass="carousel-container"
-        removeArrowOnDeviceType={['tablet', 'mobile']}  // Hide arrows on specific devices
+        removeArrowOnDeviceType={['tablet', 'mobile']}  
         dotListClass="custom-dot-list-style"
         itemClass="px-4"
       >
@@ -80,7 +80,7 @@ ESection.propTypes = {
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
-  type: PropTypes.oneOf(['place', 'event']).isRequired,  // Determine the type of section
+  type: PropTypes.oneOf(['place', 'event']).isRequired, 
 };
 
 export default ESection;

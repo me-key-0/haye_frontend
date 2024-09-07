@@ -5,6 +5,7 @@ import eventsData from '../services/events.data';
 
 const Upcoming = ({ onEventSelect }) => {
   const [events] = useState(eventsData);
+  
 
   const handleScheduleClick = (event) => {
     onEventSelect(event);
@@ -22,7 +23,7 @@ const Upcoming = ({ onEventSelect }) => {
   return (
     <div>
       <h3 className="text-xl font-bold mb-4">Upcoming Events</h3>
-      <ESection title="Upcoming Events" items={items} type="event" />
+      <ESection items={items} type="event" />
     </div>
   );
 };

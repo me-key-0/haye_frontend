@@ -1,8 +1,23 @@
 import Section from '../components/Section.component';
 import Footer from '../components/Footer.section';
+import { fetchAllPlacesRequest } from '../redux/Slices/placesSlice';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 
 const HomePage = () => {
+
+  const dispatch = useDispatch();
+  useEffect (() => { 
+    const places = dispatch(fetchAllPlacesRequest);
+
+    console.log("Places", places)
+  })
+
+
+
+
+  
   return (
     <div className="bg-white font-sans">
       <div className="pt-10 mt-10 ">

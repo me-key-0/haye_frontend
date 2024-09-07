@@ -7,13 +7,13 @@ export const signInUser = async (credentials) => {
     
     const response = await axiosInstance.post('/users/login', credentials);
   
-
+    console.log(response)
     return response.data; // This will include the access token and any other data from the backend
   } catch (error) {
     // Handle error
     if (error.response) {
       
-      console.error('Backend error:', error.response.data);
+      console.error('Backend error:', error.response.data.message);
       throw new Error(error.response.data.error || 'Server error');
     } else if (error.request) {
       // The request was made but no response was received
@@ -38,9 +38,16 @@ export const signUpUser = async (credentials) => {
 };
 
 export const signOutUser = () => {
-  return axiosInstance.post('users/logout'); // Call the backend logout endpoint
+  return axiosInstance.post('/users/logout'); // Call the backend logout endpoint
 };
 
-export const verifyOtp = () => {
-  return axiosInstance.post('user/verify')
+export const verifyOtp = async() => {
+  try {
+    const response = await axiosInstance.post('/users/register-user');
+    console.log(response)
+    return response.data; 
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Network error');
+}
+
 }

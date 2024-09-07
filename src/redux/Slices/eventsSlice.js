@@ -5,7 +5,7 @@ const eventsSlice = createSlice({
   name: 'events',
   initialState: {
     scheduledEvents: [],
-    notifications: [],
+    
     status: 'idle',
     error: null,
   },
@@ -14,8 +14,9 @@ const eventsSlice = createSlice({
         state.status = 'loading';
     },
     scheduleEventSuccess: (state, action) => {
-      state.scheduledEvents.push(action.payload);
-      state.notifications.push({ message: 'Event scheduled successfully!' });
+      console.log(action.payload.name)
+      state.scheduledEvents.push(action.payload.name);
+    
     },
     scheduleEventFailure: (state, action) => {
       state.error = action.payload;
@@ -29,9 +30,7 @@ const eventsSlice = createSlice({
     getScheduledEventsFailure: (state, action) => {
       state.error = action.payload;
     },
-    addNotification: (state, action) => {
-      state.notifications.push(action.payload);
-    },
+    
   },
 });
 
