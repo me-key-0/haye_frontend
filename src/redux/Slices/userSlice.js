@@ -187,7 +187,6 @@ const userSlice = createSlice({
     state.isAuthenticated = true;
     state.token = action.payload.token
   }
-}
 }); 
 
 
