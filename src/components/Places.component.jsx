@@ -4,8 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import places from '../services/places.data';
 import Item from './CardItem.component';
 import SearchBar from './SearchBar.component';
+
 import { setAllPlaces ,addPlaceToFavorite, } from '../redux/Slices/placesSlice';
 import { addFavorite,   } from '../redux/Slices/userSlice';
+
 
 const Places = () => {
   const [activeTab, setActiveTab] = useState('All');
@@ -37,6 +39,9 @@ const Places = () => {
     } else if (isAlreadyFavorite) {
       // Optional: Alert the user that the item is already in favorites
       console.log('This place is already in favorites.');
+
+
+ 
     }
   };
   

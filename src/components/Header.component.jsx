@@ -7,12 +7,15 @@ import {
   fetchScheduledEventsStart,
   fetchUserProfileStart,
   setCurrentUser,
+
   removeFavorite,
-  
+
 } from '../redux/Slices/userSlice';
 import { removePlaceFromFavorite } from '../redux/Slices/placesSlice';
 import { signOutStart } from '../redux/Slices/authSlice';
+
 import { FaHeart, FaCalendarAlt, FaUser, FaTimes } from 'react-icons/fa';
+
 
 const Header = React.memo(() => {
   const location = useLocation();
@@ -21,8 +24,10 @@ const Header = React.memo(() => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.currentUser);
   const signOutStatus = useSelector((state) => state.auth.status);
+
   const scheduledEvents = useSelector((state) => state.user.scheduledEvents); 
   const favorites = useSelector((state) => state.user.favorites); 
+
 
   const [isFavoritesPopupVisible, setFavoritesPopupVisible] = useState(false);
   const [isEventsPopupVisible, setEventsPopupVisible] = useState(false);
@@ -85,12 +90,14 @@ const Header = React.memo(() => {
   useEffect(() => {
     if (currentUser) {
 
+
     const token = localStorage.getItem('accessToken');
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (token && user) {
       dispatch(setCurrentUser({ token, user }));
     }
+
       //handleFetchFavorites();
       //handleFetchScheduledEvents();
     }
@@ -107,13 +114,10 @@ const Header = React.memo(() => {
   const handleProfileClick = () => {
     handleFetchUserProfile();
     navigate('/profile');
+
   };
 
-  // Remove favorite handler
-  const handleRemoveFavorite = (placeId) => {
-    dispatch(removeFavorite(placeId));
-    dispatch(removePlaceFromFavorite(placeId));
-  };
+
 
   return (
     <header className="bg-[#FCF8F1] shadow-md fixed top-0 left-0 w-full z-50 flex items-center justify-between h-16 lg:h-20 px-4 sm:px-6 lg:px-8">

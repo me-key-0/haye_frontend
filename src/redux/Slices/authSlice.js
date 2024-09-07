@@ -21,6 +21,7 @@ const authSlice = createSlice({
     },
     signInSuccess: (state, action) => {
       state.status = 'succeeded';
+
       state.token = action.payload.accessToken;
       state.currentUser = action.payload.user;
       state.isAuthenticated = true;
