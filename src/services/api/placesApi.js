@@ -3,7 +3,7 @@ import axiosInstance from './axiosInstance';
 // Fetch all places
 export const fetchAllPlaces = async () => {
   try {
-    const response = await axiosInstance.get('/api/places');
+    const response = await axiosInstance.get('/places');
     return response.data;
   } catch (error) {
     console.error('Fetch all places error:', error);

@@ -21,11 +21,12 @@ const authSlice = createSlice({
     },
     signInSuccess: (state, action) => {
       state.status = 'succeeded';
-      console.log(action.payload)
+
       state.token = action.payload.accessToken;
       state.currentUser = action.payload.user;
       state.isAuthenticated = true;
-     
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
     },
    
     signInFailure(state, action) {
@@ -64,6 +65,7 @@ const authSlice = createSlice({
     verifyOtpSuccess(state, action) {
       state.status = 'succeeded';
       state.error = null;
+      console.log(action.payload);
       state.currentUser = action.payload;
     },
     verifyOtpFailure(state, action) {

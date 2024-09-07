@@ -114,10 +114,13 @@ function* verifyOtpSaga(action) {
 // Worker Saga: will be fired on checkAuthRequest actions
 function* checkAuthSaga() {
   try {
-    const response = yield call(CheckAuth); 
+    const response = yield call(CheckAuth);
+    console.log(response
+      
+    ) 
     yield put(checkAuthSuccess({ isAuthenticated: response.isAuthenticated }));
   } catch (error) {
-    yield put(checkAuthFailure({ error: error.message }));
+    yield put(checkAuthFailure({ }));
   }
 }
 

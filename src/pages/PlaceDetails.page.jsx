@@ -25,7 +25,7 @@ const PlaceDetailsPage = () => {
   const { name, description, rating, images = [] } = place;
 
   return (
-    <div className="p-5">
+    <div className="pt-20">
       <h2 className="text-2xl font-bold mb-4">{name}</h2>
       <p className="mb-4">{description}</p>
       <div className="mb-4">

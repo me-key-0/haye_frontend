@@ -1,23 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchScheduledEventsStart,updateUserProfileStart, fetchUserProfileStart, fetchUserFavoritesStart } from '../redux/Slices/userSlice';
+import {
+  fetchScheduledEventsStart,
+  updateUserProfileStart,
+  fetchUserProfileStart,
+  fetchUserFavoritesStart,
+} from '../redux/Slices/userSlice';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-//import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector(state => state.auth.currentUser);
-  const userProfile = useSelector(state => state.user.profile);
-  const userFavorites = useSelector(state => state.user.favorites);
-  const userEvents = useSelector(state => state.user.scheduledEvents);
-  const status = useSelector(state => state.user.status);
-  const error = useSelector(state => state.user.error);
+  const currentUser = useSelector((state) => state.auth.currentUser);
+  const userProfile = useSelector((state) => state.user.profile);
+  const userFavorites = useSelector((state) => state.user.favorites);
+  const userEvents = useSelector((state) => state.user.scheduledEvents);
+  const status = useSelector((state) => state.user.status);
+  const error = useSelector((state) => state.user.error);
 
   const [name, setName] = useState(currentUser?.name || '');
   const [email, setEmail] = useState(currentUser?.email || '');
@@ -51,7 +56,7 @@ const Profile = () => {
   }
 
   if (status === 'loading') {
-    return <p>Loading...</p>;
+    return <CircularProgress />;
   }
 
   if (status === 'failed') {
@@ -59,7 +64,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="pt-20">
       <Typography variant="h4" component="h1" gutterBottom>
         Profile Dashboard
       </Typography>
@@ -77,7 +82,7 @@ const Profile = () => {
       {/* Favorites Section */}
       <div className="bg-white shadow-md rounded-lg p-6 mt-6">
         <h2 className="text-2xl font-semibold">Your Favorites</h2>
-        {/*userFavorites?.length > 0 ? (
+        {userFavorites?.length > 0 ? (
           <ul className="mt-4 space-y-4">
             {userFavorites.map((place) => (
               <li key={place.id} className="bg-gray-100 p-4 rounded-md">
@@ -89,29 +94,28 @@ const Profile = () => {
             ))}
           </ul>
         ) : (
-          <p className="mt-4">You havent added any favorites yet.</p>
-        )*/}
+          <p className="mt-4">You haven’t added any favorites yet.</p>
+        )}
       </div>
 
       {/* Scheduled Events Section */}
       <div className="bg-white shadow-md rounded-lg p-6 mt-6">
         <h2 className="text-2xl font-semibold">Your Events</h2>
-        {/*userEvents?.length > 0 ? (
+        {userEvents?.length > 0 ? (
           <ul className="mt-4 space-y-4">
-            {userEvents.map((place) => (
-              <li key={place.id} className="bg-gray-100 p-4 rounded-md">
-                <Link to={`/places/${place.id}`} className="text-lg font-semibold text-blue-600">
-                  {place.name}
+            {userEvents.map((event) => (
+              <li key={event.id} className="bg-gray-100 p-4 rounded-md">
+                <Link to={`/events/${event.id}`} className="text-lg font-semibold text-blue-600">
+                  {event.name}
                 </Link>
-                <p className="text-gray-600">{place.description}</p>
+                <p className="text-gray-600">{event.description}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="mt-4">You havent added any Events yet.</p>
-        )*/}
+          <p className="mt-4">You haven’t scheduled any events yet.</p>
+        )}
       </div>
-      
 
       {/* Settings Section with Accordion */}
       <Accordion
@@ -161,8 +165,6 @@ const Profile = () => {
           </div>
         </AccordionDetails>
       </Accordion>
-
-      
     </div>
   );
 };

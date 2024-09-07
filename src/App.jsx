@@ -11,7 +11,8 @@ import OtpPage from './pages/OTP.page';
 import Header from './components/Header.component';
 import ContactUs from './pages/ContactUs.page';
 import Profile from './pages/Profile.page';
-import PrivateRoute from './components/PrivateRoute.component';
+//import PrivateRoute from './components/PrivateRoute.component';
+
 import AdminDashboard from './pages/Admin.page';
 
 
