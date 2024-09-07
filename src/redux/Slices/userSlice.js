@@ -125,7 +125,7 @@ const userSlice = createSlice({
     fetchUserFavoritesStart(state) {
       state.status = "loading";
     },
-    fetchUserFavoritesSuccess(state, action) {
+    fetchUserFavoritesSuccess(state) {
       state.status = "succeeded";
       // state.favorites = action.payload;
     },
@@ -136,7 +136,7 @@ const userSlice = createSlice({
     fetchScheduledEventsStart(state) {
       state.status = "loading";
     },
-    fetchScheduledEventsSuccess(state, action) {
+    fetchScheduledEventsSuccess(state) {
       state.status = "succeeded";
       // state.scheduledEvents = action.payload;
     },
