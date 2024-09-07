@@ -4,8 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import places from '../services/places.data';
 import Item from './CardItem.component';
 import SearchBar from './SearchBar.component';
-import { setAllPlaces ,addPlaceToFavorite, removePlaceFromFavorite} from '../redux/Slices/placesSlice';
-import { addFavorite, removeFavorite,  } from '../redux/Slices/userSlice';
+
+import { setAllPlaces ,addPlaceToFavorite, } from '../redux/Slices/placesSlice';
+import { addFavorite,   } from '../redux/Slices/userSlice';
+
 
 const Places = () => {
   const [activeTab, setActiveTab] = useState('All');
@@ -24,18 +26,22 @@ const Places = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-
   const handleFavoriteClick = (placeId) => {
     const currentPlace = places.find(place => place.id === placeId);
   
-    if (currentPlace) {
-      if (favorites.find(fav => fav.id === currentPlace.id)) {
-        dispatch(removePlaceFromFavorite(currentPlace.id));
-        dispatch(removeFavorite(currentPlace.id));
-      } else {
-        dispatch(addPlaceToFavorite(currentPlace.id));
-        dispatch(addFavorite({ id: currentPlace.id, ...currentPlace }));
-      }
+    // Prevent adding duplicate favorites
+    const isAlreadyFavorite = favorites.some(fav => fav.id === placeId);
+  
+    if (currentPlace && !isAlreadyFavorite) {
+      // Add to favorites if not already favorited
+      dispatch(addPlaceToFavorite(currentPlace.id));
+      dispatch(addFavorite({ id: currentPlace.id, ...currentPlace }));
+    } else if (isAlreadyFavorite) {
+      // Optional: Alert the user that the item is already in favorites
+      console.log('This place is already in favorites.');
+
+
+ 
     }
   };
   

@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
     isAuthenticated: false,
+    token: null,
     currentUser: null,
     users: [],
     favorites: [],
-    scheduledEvents: [],
-    status: "idle", // standardized status: 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: 'idle', // standardized status: 'idle' | 'loading' | 'succeeded' | 'failed'
+
     error: null,
   },
   reducers: {
@@ -91,10 +93,11 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     // Favorites fetch actions
-    addFavorite: (state, action) => {
-      const isFavorite = state.favorites.some(
-        (fav) => fav.id === action.payload.id
-      );
+
+     addFavorite : (state, action) => {
+    
+      const isFavorite = state.favorites.find(fav => fav.id === action.payload.id);
+
       //console.log(action.payload.name)
       //console.log(isFavorite)
 
@@ -102,14 +105,15 @@ const userSlice = createSlice({
         state.favorites.push(action.payload.name);
       }
 
-      //console.log("Updated state.favorites:", state.favorites);
-    },
+    
+    }
+    ,
+    
     removeFavorite(state, action) {
-      state.favorites = state.favorites.filter(
-        (fav) => fav.id !== action.payload
-      ); // Filter out the item
+      state.favorites = state.favorites.filter(fav => fav.id !== action.payload); // Filter out the item
     },
-
+    
+   
     updateUserProfileStart(state) {
       state.status = "loading";
     },
@@ -152,7 +156,40 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
     },
   },
-});
+
+  fetchUserFavoritesStart(state) {
+    state.status = 'loading';
+  },
+  fetchUserFavoritesSuccess(state, action) {
+    state.status = 'succeeded';
+    //state.favorites = action.payload;
+  },
+  fetchUserFavoritesFailure(state, action) {
+    state.status = 'failed';
+    state.error = action.payload;
+  }, 
+  fetchScheduledEventsStart(state) {
+    state.status = 'loading';
+  },
+  fetchScheduledEventsSuccess(state, action) {
+    state.status = 'succeeded';
+    //state.scheduledEvents = action.payload;
+  },
+  fetchScheduledEventsFailure(state, action) {
+    state.status = 'failed';
+    state.error = action.payload;
+  },
+  setUserAuthenticated(state, action) {
+    state.isAuthenticated = action.payload;
+  },
+  setCurrentUser(state,action) {
+    state.currentUser = action.payload.user;
+    state.isAuthenticated = true;
+    state.token = action.payload.token
+  }
+}
+}); 
+
 
 export const {
   fetchAllUsersRequest,

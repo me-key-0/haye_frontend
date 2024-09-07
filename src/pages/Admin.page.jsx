@@ -87,7 +87,9 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="p-4">
+
+    <div className="pt-20">
+
       <Typography variant="h4" component="h1" gutterBottom>
         Admin Dashboard
       </Typography>
