@@ -96,7 +96,7 @@ const userSlice = createSlice({
 
      addFavorite : (state, action) => {
     
-      const isFavorite = state.favorites.find(fav => fav.name === action.payload.name);
+      const isFavorite = state.favorites.find(fav => fav === action.payload.name);
 
       //console.log(action.payload.name)
       //console.log(isFavorite)
@@ -110,7 +110,8 @@ const userSlice = createSlice({
     ,
     
     removeFavorite(state, action) {
-      state.favorites = state.favorites.filter(fav => fav.id !== action.payload); // Filter out the item
+      
+      state.favorites = state.favorites.filter(fav => fav !== action.payload); // Filter out the item
     },
     
    

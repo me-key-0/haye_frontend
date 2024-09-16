@@ -219,7 +219,7 @@ const Header = React.memo(() => {
             <div className="relative" ref={favoritesRef}>
               <button onClick={toggleFavoritesPopup} className="relative">
                 <FaHeart size={24} />
-                {console.log(favorites)}
+                
                 {favorites.length > 0 && (
                   <span className="absolute bg-red-500 text-white rounded-full text-xs px-1.5 py-0.5 -top-1 -right-1">
                     {favorites.length}
@@ -232,10 +232,10 @@ const Header = React.memo(() => {
                   <ul className="space-y-2">
                     {favorites.length > 0 ? (
                       favorites.map((favorite) => (
-                        <li key={favorite.name} className="flex justify-between items-center text-sm text-black-700">
-                          <span>{favorite.title}</span>
+                        <li key={favorite} className="flex justify-between items-center text-sm text-black-700">
+                          <span>{favorite}</span>
                           <button
-                            onClick={() => handleRemoveFavorite(favorite.name)}
+                            onClick={() => handleRemoveFavorite(favorite)}
                             className="text-red-500 hover:text-red-700"
                           >
                             <FaTimes />
