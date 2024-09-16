@@ -24,7 +24,7 @@ const Header = React.memo(() => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const signOutStatus = useSelector((state) => state.auth.status);
 
-  const scheduledEvents = useSelector((state) => state.user.scheduledEvents); 
+  const scheduledEvents = useSelector((state) => state.events.scheduledEvents); 
   const favorites = useSelector((state) => state.user.favorites); 
 
 
