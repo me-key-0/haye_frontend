@@ -4,12 +4,11 @@ import { addFavorite, removeFavorite } from './userSlice';
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    token: null,  
-         
-    currentUser: null,        
-    isAuthenticated: false, 
+    token: localStorage.getItem('accessToken') || null,  
+    currentUser: JSON.parse(localStorage.getItem('user')) || null,        
+    isAuthenticated: !!localStorage.getItem('accessToken'), 
     status: 'idle',    
-    error: null,       
+    error: null,         
   },
   reducers: {
     // Authentication actions

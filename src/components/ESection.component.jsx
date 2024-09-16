@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ESection = ({ title, items, type }) => {
   const navigate = useNavigate();
-
+  
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },

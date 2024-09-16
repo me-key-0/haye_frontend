@@ -26,6 +26,7 @@ class ExplorePage extends Component {
         { id: 9, name: 'Place 9', image: 'https://via.placeholder.com/300x200', description: 'A favorite among locals.' },
       ],
     };
+    
   }
 
   render() {
@@ -34,6 +35,7 @@ class ExplorePage extends Component {
     return (
       <div className="pt-20">
         <SearchBar />
+        
         <ESection title="Trending Places" items={trendingPlaces}  type="place"/>
         <ESection title="Best Deals" items={bestDeals}  type="place"/>
         <ESection title="Top Rated Places" items={topRatedPlaces} type="place"/>
