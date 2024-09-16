@@ -31,6 +31,8 @@ const placesSlice = createSlice({
     fetchAllPlacesSuccess(state, action) {
       state.loading = false;
       state.allPlaces = action.payload;
+      
+
     },
     fetchAllPlacesFailure(state, action) {
       state.loading = false;
@@ -49,13 +51,13 @@ const placesSlice = createSlice({
       
     },
     addPlaceToFavorite(state, action) {
-      const placeId = action.payload;
+      const placeName = action.payload;
       //console.log(placeId)
-      const place = state.allPlaces.find(p => p.id === placeId);
+      const place = state.allPlaces.find(p => p.name === placeName);
       if (place) {
         place.isFavorited = true;
         // Dispatch action to update user slice
-        addFavorite({ id: placeId, ...place}); 
+        addFavorite({ id: placeName, ...place}); 
       }
     },
     removePlaceFromFavorite(state, action) {

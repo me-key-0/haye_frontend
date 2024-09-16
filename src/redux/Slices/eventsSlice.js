@@ -25,7 +25,7 @@ const eventsSlice = createSlice({
         state.status = 'loading' ;
     },
     getScheduledEventsSuccess: (state, action) => {
-      state.scheduledEvents = action.payload;
+     //  state.scheduledEvents = action.payload;
     },
     getScheduledEventsFailure: (state, action) => {
       state.error = action.payload;

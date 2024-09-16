@@ -96,7 +96,7 @@ const userSlice = createSlice({
 
      addFavorite : (state, action) => {
     
-      const isFavorite = state.favorites.find(fav => fav.id === action.payload.id);
+      const isFavorite = state.favorites.find(fav => fav.name === action.payload.name);
 
       //console.log(action.payload.name)
       //console.log(isFavorite)
