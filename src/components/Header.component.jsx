@@ -38,9 +38,10 @@ const Header = React.memo(() => {
     currentPath === path ? 'text-blue-600 font-semibold' : '';
 
   const handleSignOut = () => {
-    localStorage.removeItem('accessToken');
-  localStorage.removeItem('user');
     dispatch(signOutStart({ currentUser }));
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    
   };
 
   const handleFetchFavorites = useCallback(() => {

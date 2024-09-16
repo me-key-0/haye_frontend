@@ -4,13 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import CustomButton from '../components/CustomButton.component';
 import FormInput from '../components/FormInput.component';
 import eventsData from '../services/events.data';
-import { scheduleEventStart, scheduleEventSuccess, scheduleEventFailure } from '../redux/Slices/eventsSlice';
+import { scheduleEventStart } from '../redux/Slices/eventsSlice';
+
 
 const EventScheduler = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [scheduleDate, setScheduleDate] = useState('');
   const [successMessage, setSuccessMessage] = useState(false);  // State to track success message
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const currentUser = useSelector((state) => state.user.currentUser)
+  
   const dispatch = useDispatch();
   const [events] = useState(eventsData);
 
@@ -25,14 +28,21 @@ const EventScheduler = () => {
 
   const handleScheduleSubmit = (e) => {
     e.preventDefault();
-    
-    try {
-      dispatch(scheduleEventStart());
-      dispatch(scheduleEventSuccess({ name: selectedEvent.name, date: scheduleDate }));
-      setSuccessMessage(true);  // Show success message
-    } catch (error) {
-      dispatch(scheduleEventFailure('Failed to schedule event'));
+    if (!selectedEvent || !scheduleDate) {
+      return;
     }
+    
+    const payload = {
+      name: selectedEvent.name,
+      date: scheduleDate,
+      email: currentUser.user.email, 
+    };
+
+    
+    dispatch(scheduleEventStart(payload));
+
+    // Show success message
+    setSuccessMessage(true);
   };
 
   return (

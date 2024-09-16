@@ -10,10 +10,12 @@ import {
   getScheduledEventsFailure 
 } from '../Slices/eventsSlice';
 
+import { scheduleEventAPI } from '../../services/api/eventsApi';
 // Worker Saga for scheduling events
 function* scheduleEventSaga(action) {
   try {
-    const response = yield call(axios.post, '/events/schedule', action.payload);
+  
+    const response = yield call(scheduleEventAPI, action.payload);
     yield put(scheduleEventSuccess(response.data));
   } catch (error) {
     yield put(scheduleEventFailure(error.message));
