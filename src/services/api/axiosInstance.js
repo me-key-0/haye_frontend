@@ -3,7 +3,7 @@ import axios from "axios";
 const axiosInstance = axios.create({
 
 
-  baseURL: "http://localhost:3030",
+  baseURL: "https://haye-backend.onrender.com",
 
 
   headers: {
