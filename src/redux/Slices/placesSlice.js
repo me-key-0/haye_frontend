@@ -61,12 +61,13 @@ const placesSlice = createSlice({
       }
     },
     removePlaceFromFavorite(state, action) {
-      const placeId = action.payload;
-      const place = state.places.find(p => p.id === placeId);
+      const placeName = action.payload;
+     // console.log(allPlaces)
+      const place = state.allPlaces.map(p => p === placeName);
       if (place) {
         place.isFavorite = false;
         // Dispatch action to update user slice
-        removeFavorite(placeId);
+        removeFavorite(placeName);
       }
     },
     

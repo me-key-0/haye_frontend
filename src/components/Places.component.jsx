@@ -36,25 +36,22 @@ const Places = () => {
 
 
   const handleFavoriteClick = (placeName) => {
-    const currentPlace = places.find(place => place.name === placeName);
-    
-    console.log("currentPlace",currentPlace)
-    const isAlreadyFavorite = favorites.some(fav => fav.name === placeName);
-    
-    console.log("isAlreadyfavorirted",isAlreadyFavorite)
+    const currentPlace = places.find((place) => place.name === placeName);
   
-    if (currentPlace && !isAlreadyFavorite) {
-     
-      dispatch(addPlaceToFavorite(currentPlace.name));
-      dispatch(addFavorite({ id: currentPlace.name, ...currentPlace }));
-    } else if (isAlreadyFavorite) {
-      
+    if (!currentPlace) return; // If place is not found, exit
+   
+    
+    const isAlreadyFavorite = favorites.some((fav) => fav === currentPlace.name);
+    console.log("isAlreadyFavorite): ", isAlreadyFavorite)
+    if (!isAlreadyFavorite) {
+      // Add place to favorites if not already favorited
+      dispatch(addPlaceToFavorite(currentPlace));
+      dispatch(addFavorite({ ...currentPlace }));
+    } else {
       console.log('This place is already in favorites.');
-
-
- 
     }
   };
+  
   
   
 
