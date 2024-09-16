@@ -1,11 +1,12 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import places from '../services/places.data';
+
 import Item from './CardItem.component';
 import SearchBar from './SearchBar.component';
+import { fetchAllPlacesRequest } from '../redux/Slices/placesSlice';
 
-import { setAllPlaces ,addPlaceToFavorite, } from '../redux/Slices/placesSlice';
+import { addPlaceToFavorite, } from '../redux/Slices/placesSlice';
 import { addFavorite,   } from '../redux/Slices/userSlice';
 
 
@@ -21,23 +22,33 @@ const Places = () => {
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  dispatch(setAllPlaces(places));
+ 
+  useEffect(() => { 
+    dispatch(fetchAllPlacesRequest())
+    // dispatch(setAllPlaces(places));
+    
+  }, [dispatch]);  
+  const places = useSelector((state) => state.places.allPlaces);
+ 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-  const handleFavoriteClick = (placeId) => {
-    const currentPlace = places.find(place => place.id === placeId);
-  
-    // Prevent adding duplicate favorites
-    const isAlreadyFavorite = favorites.some(fav => fav.id === placeId);
+
+
+  const handleFavoriteClick = (placeName) => {
+    const currentPlace = places.find(place => place.name === placeName);
+    
+    console.log("currentPlace",currentPlace)
+    const isAlreadyFavorite = favorites.some(fav => fav.name === placeName);
+    
+    console.log("isAlreadyfavorirted",isAlreadyFavorite)
   
     if (currentPlace && !isAlreadyFavorite) {
-      // Add to favorites if not already favorited
-      dispatch(addPlaceToFavorite(currentPlace.id));
-      dispatch(addFavorite({ id: currentPlace.id, ...currentPlace }));
+     
+      dispatch(addPlaceToFavorite(currentPlace.name));
+      dispatch(addFavorite({ id: currentPlace.name, ...currentPlace }));
     } else if (isAlreadyFavorite) {
-      // Optional: Alert the user that the item is already in favorites
+      
       console.log('This place is already in favorites.');
 
 
@@ -73,7 +84,7 @@ const Places = () => {
     }
 
     return filteredPlaces;
-  }, [activeTab, searchQuery, price, rating, location]);
+  }, [activeTab, searchQuery, price, rating, location, places]);
 
   const handleMoreDetailsClick = (place) => {
     navigate(`/places/${place.id}`);
@@ -127,7 +138,7 @@ const Places = () => {
                     rating={place.rating}
                     priceRange={place.priceRange}
                     onMoreDetailsClick={() => handleMoreDetailsClick(place.id)}
-                    onFavoriteClick={() => handleFavoriteClick(place.id)}
+                    onFavoriteClick={() => handleFavoriteClick(place.name)}
                     isFavorited={favorites.some((fav) => fav.id === place.id)}
                     isAuthenticated={isAuthenticated}
                   />

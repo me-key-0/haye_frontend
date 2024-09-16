@@ -42,7 +42,7 @@ function* fetchUserProfileSaga(action) {
 function* updateUserProfileSaga(action) {
   try {
     const { userId, updatedData } = action.payload;
-    const response = yield call(axios.put, `/api/users/${userId}`, updatedData);
+    const response = yield call(axios.put, `/users/profile-update${userId}`, updatedData);
     yield put(updateUserProfileSuccess(response.data));
   } catch (error) {
     yield put(updateUserProfileFailure(error.message));

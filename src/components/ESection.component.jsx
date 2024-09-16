@@ -54,9 +54,9 @@ const ESection = ({ title, items, type }) => {
       >
         {items.map((item) => (
           <div
-            key={item.id}
+            key={item.name}
             className="cursor-pointer rounded-lg overflow-hidden"
-            onClick={() => handleItemClick(item.id)}
+            onClick={() => handleItemClick(item.name)}
           >
             <img
               src={item.image}

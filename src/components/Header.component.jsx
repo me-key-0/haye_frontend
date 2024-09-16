@@ -7,7 +7,6 @@ import {
   fetchScheduledEventsStart,
   fetchUserProfileStart,
   setCurrentUser,
-
   removeFavorite,
 
 } from '../redux/Slices/userSlice';
@@ -79,6 +78,10 @@ const Header = React.memo(() => {
       setEventsPopupVisible(false);
     }
   };
+  const handleRemoveFavorite = (placeName) => {
+    dispatch(removePlaceFromFavorite(placeName))
+    dispatch(removeFavorite(placeName))
+  }
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
@@ -123,7 +126,7 @@ const Header = React.memo(() => {
     <header className="bg-[#FCF8F1] shadow-md fixed top-0 left-0 w-full z-50 flex items-center justify-between h-16 lg:h-20 px-4 sm:px-6 lg:px-8">
       <Link to="/">
         <img
-          src="/assets/Haye_light.png"
+          src="/assets/Haye_light.svg"
           alt="Logo"
           className="w-10 h-10 rounded-full transition-transform duration-300 hover:scale-150"
         />
@@ -229,10 +232,10 @@ const Header = React.memo(() => {
                   <ul className="space-y-2">
                     {favorites.length > 0 ? (
                       favorites.map((favorite) => (
-                        <li key={favorite.id} className="flex justify-between items-center text-sm text-black-700">
+                        <li key={favorite.name} className="flex justify-between items-center text-sm text-black-700">
                           <span>{favorite.title}</span>
                           <button
-                            onClick={() => handleRemoveFavorite(favorite.id)}
+                            onClick={() => handleRemoveFavorite(favorite.name)}
                             className="text-red-500 hover:text-red-700"
                           >
                             <FaTimes />
