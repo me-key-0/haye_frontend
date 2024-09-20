@@ -41,6 +41,9 @@ const Header = React.memo(() => {
     dispatch(signOutStart({ currentUser }));
     localStorage.removeItem('accessToken');
     localStorage.removeItem('user');
+    if (signOutStatus === 'succeded'){
+      navigate('/signin')
+    }
     
   };
 
@@ -284,6 +287,7 @@ const Header = React.memo(() => {
   );
 });
 
-Header.displayName = 'Header';
+
 
 export default Header;
+Header.displayName = 'Header';
