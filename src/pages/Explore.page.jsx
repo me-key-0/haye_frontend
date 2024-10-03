@@ -1,40 +1,26 @@
-
-import { Component } from 'react';
 import ESection from '../components/ESection.component';
 import SearchBar from '../components/SearchBar.component';
+import { fetchAllPlacesRequest } from '../redux/Slices/placesSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-class ExplorePage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      trendingPlaces: [
-        { id: 1, name: 'Place 1', image: 'https://via.placeholder.com/300x200', description: 'A popular place to visit.' },
-        { id: 2, name: 'Place 2', image: 'https://via.placeholder.com/300x200', description: 'Known for its stunning views.' },
-        { id: 3, name: 'Place 3', image: 'https://via.placeholder.com/300x200', description: 'A must-see attraction.' },
-        { id: 4, name: 'Place 4', image: 'https://via.placeholder.com/300x200', description: 'Offering the best discounts.' },
-        { id: 5, name: 'Place 5', image: 'https://via.placeholder.com/300x200', description: 'Great value for money.' },
-        { id: 6, name: 'Place 6', image: 'https://via.placeholder.com/300x200', description: 'Best deals in the area.' },
-      ],
-      bestDeals: [
-        { id: 4, name: 'Place 4', image: 'https://via.placeholder.com/300x200', description: 'Offering the best discounts.' },
-        { id: 5, name: 'Place 5', image: 'https://via.placeholder.com/300x200', description: 'Great value for money.' },
-        { id: 6, name: 'Place 6', image: 'https://via.placeholder.com/300x200', description: 'Best deals in the area.' },
-      ],
-      topRatedPlaces: [
-        { id: 7, name: 'Place 7', image: 'https://via.placeholder.com/300x200', description: 'Top rated by visitors.' },
-        { id: 8, name: 'Place 8', image: 'https://via.placeholder.com/300x200', description: 'Highly recommended.' },
-        { id: 9, name: 'Place 9', image: 'https://via.placeholder.com/300x200', description: 'A favorite among locals.' },
-      ],
-    };
-    
-  }
+const ExplorePage = () => {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(fetchAllPlacesRequest());
+  }, [dispatch]);
 
-  render() {
-    const { trendingPlaces, bestDeals, topRatedPlaces } = this.state;
+  const places = useSelector((state) => state.places.allPlaces);
+
+  // Filter places based on categories for different sections
+  const trendingPlaces = places.filter((place) => place.category === 'Restaurant');
+  const bestDeals = places.filter((place) => place.category === 'Cafe');
+  const topRatedPlaces = places.filter((place) => place.category === 'Bar');
 
     return (
       <div className="pt-20">
-        <SearchBar />
+        <SearchBar type="explore" places={places}/>
         
         <ESection title="Trending Places" items={trendingPlaces}  type="place"/>
         <ESection title="Best Deals" items={bestDeals}  type="place"/>
@@ -42,7 +28,6 @@ class ExplorePage extends Component {
       </div>
     );
   }
-}
 
 export default ExplorePage;
 

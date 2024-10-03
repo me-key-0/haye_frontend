@@ -47,7 +47,7 @@ const SignIn = () => {
             <div className="space-y-5">
               <FormInput
                 type="email"
-                name="email"
+                name="Email"
                 id="email"
                 placeholder="Enter email to get started"
                 value={credentials.email}
@@ -56,7 +56,7 @@ const SignIn = () => {
               />
               <FormInput
                 type="password"
-                name="password"
+                name="Password"
                 id="password"
                 placeholder="Enter your password"
                 value={credentials.password}

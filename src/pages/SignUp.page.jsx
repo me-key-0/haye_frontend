@@ -89,6 +89,9 @@ const SignUp = () => {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                             />
+                            {status === 'failed' && (
+                        <p className="mt-2 text-sm text-red-600">{error.details}</p>
+                    )}
                             <CustomButton
                                 type="submit"
                                 className="bg-blue-600 border-blue-600 hover:bg-blue-700 focus:bg-blue-700 py-2 px-4 text-sm"

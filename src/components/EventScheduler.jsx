@@ -50,7 +50,6 @@ const EventScheduler = () => {
       <h3 className="text-xl font-bold mb-4">Event Scheduler</h3>
 
       <div className="mb-6">
-        <label htmlFor="event-select" className="block text-base font-medium text-gray-900 mb-2">Select an Event</label>
         <select
           id="event-select"
           onChange={handleEventChange}
@@ -72,7 +71,7 @@ const EventScheduler = () => {
             <FormInput
               type="date"
               id="schedule-date"
-              name="scheduleDate"
+              name="Schedule Date"
               placeholder="Select Date"
               value={scheduleDate}
               onChange={handleScheduleDateChange}

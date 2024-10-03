@@ -24,7 +24,9 @@ const Profile = () => {
   const status = useSelector((state) => state.user.status);
   const error = useSelector((state) => state.user.error);
 
-  const [name, setName] = useState(currentUser?.name || '');
+
+
+  const [name, setName] = useState(currentUser?.displayName || '');
   const [email, setEmail] = useState(currentUser?.email || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -73,8 +75,8 @@ const Profile = () => {
       <div className="bg-white shadow-md rounded-lg p-6 mt-6">
         <h2 className="text-2xl font-semibold">Your Profile</h2>
         <div className="mt-4">
-          <p><strong>Name:</strong> {userProfile?.name}</p>
-          <p><strong>Email:</strong> {userProfile?.email}</p>
+          <p><strong>Name:</strong> {name}</p>
+          <p><strong>Email:</strong> {email}</p>
           <p><strong>Joined:</strong> {new Date(userProfile?.createdAt).toLocaleDateString()}</p>
         </div>
       </div>
@@ -85,11 +87,11 @@ const Profile = () => {
         {userFavorites?.length > 0 ? (
           <ul className="mt-4 space-y-4">
             {userFavorites.map((place) => (
-              <li key={place.id} className="bg-gray-100 p-4 rounded-md">
-                <Link to={`/places/${place.id}`} className="text-lg font-semibold text-blue-600">
-                  {place.name}
+              <li key={place} className="bg-gray-100 p-4 rounded-md">
+                <Link to={`/places/${place}`} className="text-lg font-semibold text-blue-600">
+                  {place}
                 </Link>
-                <p className="text-gray-600">{place.description}</p>
+                
               </li>
             ))}
           </ul>
@@ -104,11 +106,11 @@ const Profile = () => {
         {userEvents?.length > 0 ? (
           <ul className="mt-4 space-y-4">
             {userEvents.map((event) => (
-              <li key={event.id} className="bg-gray-100 p-4 rounded-md">
+              <li key={event} className="bg-gray-100 p-4 rounded-md">
                 <Link to={`/events/${event.id}`} className="text-lg font-semibold text-blue-600">
                   {event.name}
                 </Link>
-                <p className="text-gray-600">{event.description}</p>
+                
               </li>
             ))}
           </ul>

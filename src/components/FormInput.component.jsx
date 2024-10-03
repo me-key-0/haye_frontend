@@ -4,7 +4,7 @@ const FormInput = ({ type = 'text', name, id, placeholder, value, onChange, requ
     return (
         <div>
             <label htmlFor={id} className="text-base font-medium text-gray-900">
-                {placeholder}
+                {name}
             </label>
             <div className="mt-2.5">
                 <input
