@@ -9,9 +9,9 @@ import { fetchPlaceByIdRequest } from '../redux/Slices/placesSlice';
 const PlaceDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const place = useSelector((state) => state.place.place);
-  const loading = useSelector((state) => state.place.loading);
-  const error = useSelector((state) => state.place.error);
+  const place = useSelector((state) => state.places.Place);
+  const loading = useSelector((state) => state.places.loading);
+  const error = useSelector((state) => state.places.error);
 
   useEffect(() => {
     dispatch(fetchPlaceByIdRequest(id));

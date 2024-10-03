@@ -15,7 +15,7 @@ const Places = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [price, setPrice] = useState('');
   const [rating, setRating] = useState('');
-  const [location, setLocation] = useState('');
+  
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const favorites = useSelector((state) => state.places.favorites);
@@ -42,7 +42,7 @@ const Places = () => {
    
     
     const isAlreadyFavorite = favorites.some((fav) => fav === currentPlace.name);
-    console.log("isAlreadyFavorite): ", isAlreadyFavorite)
+   
     if (!isAlreadyFavorite) {
       // Add place to favorites if not already favorited
       dispatch(addPlaceToFavorite(currentPlace));
@@ -76,12 +76,10 @@ const Places = () => {
       filteredPlaces = filteredPlaces.filter(place => place.rating >= parseInt(rating, 10));
     }
 
-    if (location) {
-      filteredPlaces = filteredPlaces.filter(place => place.location.toLowerCase().includes(location.toLowerCase()));
-    }
+   
 
     return filteredPlaces;
-  }, [activeTab, searchQuery, price, rating, location, places]);
+  }, [activeTab, searchQuery, price, rating, places]);
 
   const handleMoreDetailsClick = (place) => {
     navigate(`/places/${place.id}`);
@@ -97,8 +95,8 @@ const Places = () => {
         setPrice={setPrice}
         rating={rating}
         setRating={setRating}
-        location={location}
-        setLocation={setLocation}
+        type="places"
+
       />
 
       <div className="w-3/4 mx-auto text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">

@@ -1,0 +1,88 @@
+/* responsive.css */
+
+/* Default styles (for larger screens) */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mobile styles (up to 768px wide) */
+  @media only screen and (max-width: 768px) {
+    header {
+      flex-direction: column;
+      padding: 1rem;
+    }
+  
+    nav ul {
+      display: none;
+    }
+  
+    .mobile-menu {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .mobile-menu ul {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    /* Ensure icons, buttons, etc., are aligned well on mobile */
+    .icon {
+      margin-left: 0;
+    }
+  }
+  
+  /* Very small mobile devices (up to 480px wide) */
+  @media only screen and (max-width: 480px) {
+    header {
+      padding: 0.5rem;
+    }
+  
+    nav ul {
+      display: none;
+    }
+  
+    .mobile-menu ul {
+      font-size: 14px;
+    }
+  }
+/* Hide the main navigation on mobile */
+nav ul {
+    display: none;
+  }
+  
+  /* Show mobile menu toggle on smaller screens */
+  .mobile-menu {
+    display: flex;
+  }
+  
+  .mobile-menu ul {
+    display: none;
+    flex-direction: column;
+  }
+  
+  @media only screen and (min-width: 768px) {
+    /* On larger screens, show the navigation */
+    nav ul {
+      display: flex;
+      gap: 2rem;
+    }
+  
+    .mobile-menu {
+      display: none;  /* Hide mobile menu on larger screens */
+    }
+  }
+    

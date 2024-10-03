@@ -13,7 +13,9 @@ import {
 import { removePlaceFromFavorite } from '../redux/Slices/placesSlice';
 import { signOutStart } from '../redux/Slices/authSlice';
 
-import { FaHeart, FaCalendarAlt, FaUser, FaTimes } from 'react-icons/fa';
+import { FaHeart, FaCalendarAlt, FaUser, FaTimes, FaBars } from 'react-icons/fa';
+
+import '../../src/header.css';
 
 
 const Header = React.memo(() => {
@@ -30,6 +32,7 @@ const Header = React.memo(() => {
 
   const [isFavoritesPopupVisible, setFavoritesPopupVisible] = useState(false);
   const [isEventsPopupVisible, setEventsPopupVisible] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const favoritesRef = useRef(null);
   const eventsRef = useRef(null);
@@ -66,6 +69,10 @@ const Header = React.memo(() => {
     setEventsPopupVisible(false);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+  
   const toggleEventsPopup = () => {
     setEventsPopupVisible(!isEventsPopupVisible);
     setFavoritesPopupVisible(false);
@@ -135,7 +142,7 @@ const Header = React.memo(() => {
           className="w-10 h-10 rounded-full transition-transform duration-300 hover:scale-150"
         />
       </Link>
-      <nav className="flex flex-grow">
+      <nav className="flex flex-grow hidden md:flex">
         <ul className="flex gap-8 flex-grow justify-center">
           <li>
             <Link
@@ -189,6 +196,20 @@ const Header = React.memo(() => {
           </li>
         </ul>
       </nav>
+      <div className="mobile-menu md:hidden">
+    <button onClick={toggleMobileMenu}>
+      <FaBars size={24} />
+    </button>
+    {isMobileMenuOpen && (
+      <ul>
+        <li><Link to="/explore">Explore</Link></li>
+        <li><Link to="/events">Events</Link></li>
+        <li><Link to="/places">Places</Link></li>
+        <li><HashLink to="/#about">About</HashLink></li>
+        <li><Link to="/contact">Contact</Link></li>
+      </ul>
+    )}
+  </div>
       <div className="flex items-center space-x-4">
         {currentUser && (
           <>
@@ -291,3 +312,5 @@ const Header = React.memo(() => {
 
 export default Header;
 Header.displayName = 'Header';
+
+

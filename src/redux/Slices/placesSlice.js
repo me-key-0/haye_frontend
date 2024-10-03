@@ -43,8 +43,10 @@ const placesSlice = createSlice({
       state.error = null;
     },
     fetchPlaceByIdSuccess(state, action) {
-      state.loading = false;
-      state.place = action.payload;
+      state.loading = false; 
+      console.log(action.payload)
+      //state.place = action.payload;
+
     },
     setAllPlaces(state, action) {
       state.allPlaces = action.payload;
