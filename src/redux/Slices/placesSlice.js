@@ -24,6 +24,7 @@ const placesSlice = createSlice({
     searchPlacesFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      
     },
     fetchAllPlacesRequest(state) {
       state.loading = true;
@@ -35,6 +36,20 @@ const placesSlice = createSlice({
 
     },
     fetchAllPlacesFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    HomeRequest(state) {
+      state.loading = true;
+    },
+    HomeSuccess(state, action) {
+      state.loading = false;
+      console.log(action.payload)
+      state.allPlaces = action.payload;
+      
+
+    },
+    HomeFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
     },
@@ -75,6 +90,9 @@ const placesSlice = createSlice({
 });
 
 export const {
+  HomeRequest,
+  HomeSuccess,
+  HomeFailure,
   fetchAllPlacesRequest,
   fetchAllPlacesSuccess,
   fetchAllPlacesFailure,

@@ -1,6 +1,6 @@
 import Section from '../components/Section.component';
 import Footer from '../components/Footer.section';
-import { fetchAllPlacesRequest } from '../redux/Slices/placesSlice';
+import { HomeRequest } from '../redux/Slices/placesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -8,15 +8,15 @@ const HomePage = () => {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(fetchAllPlacesRequest());
+    dispatch(HomeRequest());
   }, [dispatch]);
 
-  const places = useSelector((state) => state.places.allPlaces);
+  const places = useSelector((state) => state.places.allPlaces || { explore: [], event: [], fav: '' });
+  console.log(places)
 
-  // Filter places based on categories for different sections
-  const explorePlaces = places.filter((place) => place.category === 'Restaurant');
-  const eventPlaces = places.filter((place) => place.category === 'Cafe');
-  const popularPlaces = places.filter((place) => place.category === 'Bar');
+  const explorePlaces = places.explore || [];
+  const eventPlaces = places.event || [];
+  const popularPlaces = places.explore || []; // Treat fav as an array if present
 
   return (
     <div className="bg-white font-sans">
@@ -26,9 +26,9 @@ const HomePage = () => {
           <Section
             id="explore"
             title="Explore"
-            images={explorePlaces.slice(0, 10).map((place) => ({
-              src: place.image, 
-              alt: place.name
+            images={explorePlaces.slice(0, 5).map((image) => ({
+              src: image,
+              alt: `Explore image ${image}`
             }))}
             description="Discover new places"
             heading="Explore Your World"
@@ -41,9 +41,9 @@ const HomePage = () => {
           <Section
             id="events"
             title="Events"
-            images={eventPlaces.slice(0, 3).map((place) => ({
-              src: place.image, 
-              alt: place.name
+            images={eventPlaces.slice(0, 5).map((image) => ({
+              src: image,
+              alt: `Event image ${image}`
             }))}
             description="Upcoming Events and Scheduling"
             heading="Stay Updated with Events"
@@ -56,9 +56,9 @@ const HomePage = () => {
           <Section
             id="places"
             title="Popular Places"
-            images={popularPlaces.slice(0, 3).map((place) => ({
-              src: place.image, 
-              alt: place.name
+            images={explorePlaces.slice(5, 10).map((image) => ({
+              src: image,
+              alt: `Explore image ${image}`
             }))}
             description="Search, Filters, and Maps"
             heading="Find Your Favorite Spots"

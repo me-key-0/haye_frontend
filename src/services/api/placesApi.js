@@ -11,6 +11,16 @@ export const fetchAllPlaces = async () => {
     throw error;
   }
 };
+export const fetchHome = async () => {
+  try {
+    const response = await axiosInstance.get('/places/home');
+    
+    return response.data;
+  } catch (error) {
+    console.error('Fetch all places error:', error);
+    throw error;
+  }
+};
 export const searchPlaces = async (query, price, rating, location) => {
   try {
     const response = await axiosInstance.get('/places', {
