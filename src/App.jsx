@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import HomePage from './pages/HomePage';
 import Explore from './pages/Explore.page';
@@ -11,19 +11,22 @@ import OtpPage from './pages/OTP.page';
 import Header from './components/Header.component';
 import ContactUs from './pages/ContactUs.page';
 import Profile from './pages/Profile.page';
-//import PrivateRoute from './components/PrivateRoute.component';
-
 import AdminDashboard from './pages/Admin.page';
 
-
-const App = () => {
+const MainApp = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);
+  const location = useLocation();
+
+  // Conditionally render Header only on non-admin routes
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <Router>
-      <Header />
+    <>
+      {/* Render Header only if it's not the admin route */}
+      {!isAdminRoute && <Header />}
+
       <Routes>
-       <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/events" element={<Events />} />
         <Route path="/places" element={<Places />} />
@@ -36,10 +39,16 @@ const App = () => {
         <Route path="signup/otp" element={<OtpPage />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/admin" element={<AdminDashboard />}/>
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
-    </Router>
+    </>
   );
 };
+
+const App = () => (
+  <Router>
+    <MainApp />
+  </Router>
+);
 
 export default App;

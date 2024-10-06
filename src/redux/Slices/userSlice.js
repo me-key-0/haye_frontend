@@ -7,80 +7,13 @@ const userSlice = createSlice({
     isAuthenticated: false,
     token: null,
     currentUser: null,
-    users: [],
     favorites: [],
     status: 'idle', // standardized status: 'idle' | 'loading' | 'succeeded' | 'failed'
 
     error: null,
   },
   reducers: {
-    // Fetching all users
-    fetchAllUsersRequest(state) {
-      state.status = "loading";
-    },
-    fetchAllUsersSuccess(state, action) {
-      state.status = "succeeded";
-      state.users = action.payload;
-    },
-    fetchAllUsersFailure(state, action) {
-      state.status = "failed";
-      state.error = action.payload;
-    },
-
-    // Authentication actions
-    googleSignInStart(state) {
-      state.status = "loading";
-    },
-    emailSignInStart(state) {
-      state.status = "loading";
-    },
-    signInSuccess(state, action) {
-      state.status = "succeeded";
-      state.currentUser = action.payload;
-      state.error = null;
-    },
-    signInFailure(state, action) {
-      state.status = "failed";
-      state.error = action.payload;
-    },
-    signOutStart(state) {
-      state.status = "loading";
-    },
-    signOutSuccess(state) {
-      state.status = "succeeded";
-      state.currentUser = null;
-      state.error = null;
-      state.favorites = [];
-      state.scheduledEvents = [];
-    },
-    signOutFailure(state, action) {
-      state.status = "failed";
-      state.error = action.payload;
-    },
-    signUpStart(state) {
-      state.status = "loading";
-    },
-    signUpSuccess(state, action) {
-      state.status = "succeeded";
-      state.currentUser = action.payload.currentUser;
-      state.error = null;
-    },
-    signUpFailure(state, action) {
-      state.status = "failed";
-      state.error = action.payload;
-    },
-    verifyOtpStart(state) {
-      state.status = "loading";
-    },
-    verifyOtpSuccess(state, action) {
-      state.status = "succeeded";
-      state.error = null;
-      state.currentUser = action.payload;
-    },
-    verifyOtpFailure(state, action) {
-      state.status = "failed";
-      state.error = action.payload;
-    },
+    
     fetchUserProfileStart(state) {
       state.status = "loading";
     },
@@ -184,17 +117,16 @@ const userSlice = createSlice({
     state.isAuthenticated = action.payload;
   },
   setCurrentUser(state,action) {
-    state.currentUser = action.payload.user;
+
+    state.currentUser = action.payload.user.user;
     state.isAuthenticated = true;
-    state.token = action.payload.token
+    state.token = action.payload.user.token
   }
 }); 
 
 
 export const {
-  fetchAllUsersRequest,
-  fetchAllUsersSuccess,
-  fetchAllUsersFailure,
+  
   fetchUserProfileStart,
   fetchUserProfileSuccess,
   fetchUserProfileFailure,

@@ -1,14 +1,8 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
-import ESection from './ESection.component';
-import eventsData from '../services/events.data';
 
-const Upcoming = ({ onEventSelect }) => {
-  const [events] = useState(eventsData);
-  
-
+const Upcoming = ({ events, onEventSelect }) => {
   const handleScheduleClick = (event) => {
-    onEventSelect(event);
+    onEventSelect(event); // Pass selected event to parent component
     document.getElementById('event-scheduler').scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -23,12 +17,18 @@ const Upcoming = ({ onEventSelect }) => {
   return (
     <div>
       <h3 className="text-xl font-bold mb-4">Upcoming Events</h3>
-      <ESection items={items} type="event" />
+      {items.map(item => (
+        <div key={item.id} onClick={item.onClick} className="event-item">
+          <h4>{item.name}</h4>
+          <p>{item.date}</p>
+        </div>
+      ))}
     </div>
   );
 };
 
 Upcoming.propTypes = {
+  events: PropTypes.array.isRequired,
   onEventSelect: PropTypes.func.isRequired,
 };
 

@@ -1,257 +1,134 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchPlacesStart,
-  fetchEventsStart,
-  addPlaceStart,
-  updatePlaceStart,
-  deletePlaceStart,
-  addEventStart,
-  updateEventStart,
-  deleteEventStart,
-} from '../redux/Slices/adminSlice'; // Assume this slice handles admin actions
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useState } from 'react';
+import { Doughnut, Line } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale } from 'chart.js';
+import DataList from '../components/DataList'; 
+import Sidebar from '../components/SideBar';
 
-const AdminDashboard = () => {
-  const dispatch = useDispatch();
-  const places = useSelector((state) => state.admin.places);
-  const events = useSelector((state) => state.admin.events);
-  const status = useSelector((state) => state.admin.status);
-  const error = useSelector((state) => state.admin.error);
+// Register necessary Chart.js components
+ChartJS.register(ArcElement, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
 
-  const [placeName, setPlaceName] = useState('');
-  const [placeDescription, setPlaceDescription] = useState('');
-  const [eventName, setEventName] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-  const [expanded, setExpanded] = useState(false);
-
-  // States for editing existing places and events
-  const [editingPlaceId, setEditingPlaceId] = useState(null);
-  const [editingEventId, setEditingEventId] = useState(null);
-
-  useEffect(() => {
-    dispatch(fetchPlacesStart());
-    dispatch(fetchEventsStart());
-  }, [dispatch]);
-
-  const handleAddPlace = () => {
-    if (editingPlaceId) {
-      dispatch(updatePlaceStart({ id: editingPlaceId, name: placeName, description: placeDescription }));
-      setEditingPlaceId(null);
-    } else {
-      dispatch(addPlaceStart({ name: placeName, description: placeDescription }));
+const AdminPage = () => {
+  // State to manage the active tab
+  const [activeTab, setActiveTab] = useState('overview');
+  
+  const handleAddItem = (newItem, type) => {
+    if (type === 'user') {
+      setUsers((prevUsers) => [...prevUsers, newItem]);
+    } else if (type === 'place') {
+      setPlaces((prevPlaces) => [...prevPlaces, newItem]);
+    } else if (type === 'event') {
+      setEvents((prevEvents) => [...prevEvents, newItem]);
     }
-    setPlaceName('');
-    setPlaceDescription('');
   };
 
-  const handleAddEvent = () => {
-    if (editingEventId) {
-      dispatch(updateEventStart({ id: editingEventId, name: eventName, description: eventDescription }));
-      setEditingEventId(null);
-    } else {
-      dispatch(addEventStart({ name: eventName, description: eventDescription }));
+  const handleRemoveItem = (id, type) => {
+    if (type === 'user') {
+      setUsers((prevUsers) => prevUsers.filter(user => user.id !== id));
+    } else if (type === 'place') {
+      setPlaces((prevPlaces) => prevPlaces.filter(place => place.id !== id));
+    } else if (type === 'event') {
+      setEvents((prevEvents) => prevEvents.filter(event => event.id !== id));
     }
-    setEventName('');
-    setEventDescription('');
   };
 
-  const handleEditPlace = (place) => {
-    setEditingPlaceId(place.id);
-    setPlaceName(place.name);
-    setPlaceDescription(place.description);
+  // Dummy user data for demonstration
+  const [users, setUsers] = useState([
+    { id: 1, name: 'John Doe', email: 'john@example.com' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
+  ]);
+  const [places, setPlaces] = useState([
+    { id: 1, name: 'Boom burger', category: 'Restaurant' },
+    { id: 2, name: 'Hyatt Regency', category: 'Hotel' },
+  ]);
+  const [events, setEvents] = useState([
+    { id: 1, name: 'The lab', date: '23/2/23' },
+    { id: 2, name: 'Bermel fest', date: '12/4/24' },
+  ]);
+
+  // Dummy chart data
+  const doughnutData = {
+    labels: ['Users', 'Places', 'Events'],
+    datasets: [
+      {
+        label: 'Overview Data',
+        data: [300, 50, 100],
+        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'],
+      },
+    ],
   };
 
-  const handleEditEvent = (event) => {
-    setEditingEventId(event.id);
-    setEventName(event.name);
-    setEventDescription(event.description);
+  const lineData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'Users Growth',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        borderColor: '#ff6384',
+        fill: false,
+      },
+      {
+        label: 'Places Growth',
+        data: [28, 48, 40, 19, 86, 27, 90],
+        borderColor: '#36a2eb',
+        fill: false,
+      },
+    ],
   };
 
-  const handleAccordionChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+  // Function to render the main content based on the active tab
+  const renderContent = () => {
+    if (activeTab === 'overview') {
+      return (
+        <div>
+          <div className="grid grid-cols-3 gap-8 mb-12">
+            <div className="bg-white p-6 rounded-lg shadow-md text-center">
+              <h2 className="text-2xl font-bold mb-2">Users</h2>
+              <p className="text-xl">1,245</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md text-center">
+              <h2 className="text-2xl font-bold mb-2">Places</h2>
+              <p className="text-xl">84</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md text-center">
+              <h2 className="text-2xl font-bold mb-2">Events</h2>
+              <p className="text-xl">43</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 h-full">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-bold mb-4 ">Data Overview</h3>
+              <Doughnut data={doughnutData} />
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-bold mb-4">Growth Over Time</h3>
+              <Line data={lineData} />
+            </div>
+          </div>
+        </div>
+      );
+    } else if (activeTab === 'users') {
+      return <DataList data={users} type='user' onAdd={(newItem) => handleAddItem(newItem, 'user')} onRemove={(id) => handleRemoveItem(id, 'user')} />;
+    } else if (activeTab === 'places') {
+      return <DataList data={places} type='place' onAdd={(newItem) => handleAddItem(newItem, 'place')} onRemove={(id) => handleRemoveItem(id, 'place')} />;
+    } else if (activeTab === 'events') {
+      return <DataList data={events} type='event' onAdd={(newItem) => handleAddItem(newItem, 'event')} onRemove={(id) => handleRemoveItem(id, 'event')} />;
+    }
+    return null; // Handle the case where no tab is active
   };
-
-  if (status === 'loading') {
-    return <p>Loading...</p>;
-  }
-
-  if (status === 'failed') {
-    return <p>Error: {error}</p>;
-  }
 
   return (
+    <div className="flex h-screen">
+      {/* Sidebar */}
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-    <div className="pt-20">
-
-      <Typography variant="h4" component="h1" gutterBottom>
-        Admin Dashboard
-      </Typography>
-
-      {/* Places Management Section */}
-      <div className="bg-white shadow-md rounded-lg p-6 mt-6">
-        <h2 className="text-2xl font-semibold">Manage Places</h2>
-        <div className="mt-4">
-          <TextField
-            label="Place Name"
-            variant="outlined"
-            value={placeName}
-            onChange={(e) => setPlaceName(e.target.value)}
-            fullWidth
-            className="mb-4"
-          />
-          <TextField
-            label="Place Description"
-            variant="outlined"
-            value={placeDescription}
-            onChange={(e) => setPlaceDescription(e.target.value)}
-            fullWidth
-            className="mb-4"
-          />
-          <Button variant="contained" color="primary" onClick={handleAddPlace}>
-            {editingPlaceId ? 'Update Place' : 'Add Place'}
-          </Button>
-          {/* List existing places */}
-          {places?.length > 0 ? (
-            <ul className="mt-4 space-y-4">
-              {places.map((place) => (
-                <li key={place.id} className="bg-gray-100 p-4 rounded-md">
-                  <h3 className="text-lg font-semibold">{place.name}</h3>
-                  <p className="text-gray-600">{place.description}</p>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleEditPlace(place)}
-                    className="mr-2"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => dispatch(deletePlaceStart(place.id))}
-                  >
-                    Delete
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-4">No places available.</p>
-          )}
-        </div>
+      {/* Main Content */}
+      <div className="flex-1 bg-gray-100 p-8">
+        {renderContent()}
       </div>
-
-      {/* Events Management Section */}
-      <div className="bg-white shadow-md rounded-lg p-6 mt-6">
-        <h2 className="text-2xl font-semibold">Manage Events</h2>
-        <div className="mt-4">
-          <TextField
-            label="Event Name"
-            variant="outlined"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-            fullWidth
-            className="mb-4"
-          />
-          <TextField
-            label="Event Description"
-            variant="outlined"
-            value={eventDescription}
-            onChange={(e) => setEventDescription(e.target.value)}
-            fullWidth
-            className="mb-4"
-          />
-          <Button variant="contained" color="primary" onClick={handleAddEvent}>
-            {editingEventId ? 'Update Event' : 'Add Event'}
-          </Button>
-          {/* List existing events */}
-          {events?.length > 0 ? (
-            <ul className="mt-4 space-y-4">
-              {events.map((event) => (
-                <li key={event.id} className="bg-gray-100 p-4 rounded-md">
-                  <h3 className="text-lg font-semibold">{event.name}</h3>
-                  <p className="text-gray-600">{event.description}</p>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleEditEvent(event)}
-                    className="mr-2"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => dispatch(deleteEventStart(event.id))}
-                  >
-                    Delete
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-4">No events available.</p>
-          )}
-        </div>
-      </div>
-
-      {/* Settings Section with Accordion */}
-      <Accordion
-        expanded={expanded === 'panel1'}
-        onChange={handleAccordionChange('panel1')}
-        className="mt-6"
-      >
-        <AccordionSummary
-          // expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography>Manage Account</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div className="flex flex-col gap-4">
-            <TextField
-              label="Admin Name"
-              variant="outlined"
-              value={placeName} // Use appropriate state for admin details
-              onChange={(e) => setPlaceName(e.target.value)} // Update state as needed
-            />
-            <TextField
-              label="Admin Email"
-              variant="outlined"
-              type="email"
-              value={placeDescription} // Use appropriate state for admin details
-              onChange={(e) => setPlaceDescription(e.target.value)} // Update state as needed
-            />
-            <TextField
-              label="New Password"
-              variant="outlined"
-              type="password"
-              value={eventName} // Use appropriate state for password
-              onChange={(e) => setEventName(e.target.value)} // Update state as needed
-            />
-            <TextField
-              label="Confirm Password"
-              variant="outlined"
-              type="password"
-              value={eventDescription} // Use appropriate state for confirm password
-              onChange={(e) => setEventDescription(e.target.value)} // Update state as needed
-            />
-            <Button variant="contained" color="primary">
-              Update Admin Profile
-            </Button>
-          </div>
-        </AccordionDetails>
-      </Accordion>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default AdminPage;

@@ -1,9 +1,7 @@
 import { call, put, takeEvery, all } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-  fetchAllUsersRequest,
-  fetchAllUsersSuccess,
-  fetchAllUsersFailure,
+ 
   fetchScheduledEventsStart,
   fetchScheduledEventsSuccess,
   fetchScheduledEventsFailure,
@@ -21,14 +19,6 @@ import {
 
 import { CheckAuth } from '../../services/auth/CheckAuth';
 
-function* fetchAllUsersSaga() {
-  try {
-    const response = yield call(axios.get, '/api/users');
-    yield put(fetchAllUsersSuccess(response.data));
-  } catch (error) {
-    yield put(fetchAllUsersFailure(error.message));
-  }
-}
 
 function* fetchUserProfileSaga(action) {
   try {
@@ -79,7 +69,6 @@ function* fetchScheduledEventsSaga(action) {
 export function* userSaga() {
  
   yield all([
-    takeEvery(fetchAllUsersRequest.type, fetchAllUsersSaga),
     takeEvery(fetchScheduledEventsStart.type, fetchScheduledEventsSaga),
     takeEvery(fetchUserFavoritesStart.type, fetchUserFavoritesSaga),
     takeEvery(fetchUserProfileStart.type, fetchUserProfileSaga),

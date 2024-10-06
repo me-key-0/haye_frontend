@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-//import { fetchAllPlaces, addPlace, updatePlace, deletePlace, fetchAllEvents, addEvent, updateEvent, deleteEvent } from '../api/adminApi'; // Assume these API functions exist
+
+
 
 const adminSlice = createSlice({
   name: 'admin',
@@ -11,15 +12,15 @@ const adminSlice = createSlice({
     error: null,
   },
   reducers: {
-    fetchPlacesStart(state) {
-      state.status = 'loading';
+    fetchAllUsersStart(state) {
+      state.status = "loading";
     },
-    fetchPlacesSuccess(state, action) {
-      state.status = 'succeeded';
-      state.places = action.payload;
+    fetchAllUsersSuccess(state, action) {
+      state.status = "succeeded";
+      state.users = action.payload;
     },
-    fetchPlacesFailure(state, action) {
-      state.status = 'failed';
+    fetchAllUsersFailure(state, action) {
+      state.status = "failed";
       state.error = action.payload;
     },
     addPlaceStart(state) {
@@ -44,17 +45,7 @@ const adminSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload;
     },
-    fetchEventsStart(state) {
-      state.status = 'loading';
-    },
-    fetchEventsSuccess(state, action) {
-      state.status = 'succeeded';
-      state.events = action.payload;
-    },
-    fetchEventsFailure(state, action) {
-      state.status = 'failed';
-      state.error = action.payload;
-    },
+    
     addEventStart(state) {
       state.status = 'loading';
     },
@@ -116,12 +107,11 @@ const adminSlice = createSlice({
  
 
 export const {
-  fetchPlacesStart, fetchPlacesSuccess, fetchPlacesFailure,
+  fetchAllUsersStart, fetchAllUsersSuccess, fetchAllUsersFailure,
   addPlaceStart, addPlaceSuccess, addPlaceFailure,
   deletePlaceStart, deletePlaceSuccess, deletePlaceFailure,
   updatePlaceStart, updatePlaceSuccess, updatePlaceFailure,
   updateEventStart,updateEventSuccess, updateEventFailure,
-  fetchEventsStart, fetchEventsSuccess, fetchEventsFailure,
   addEventStart, addEventSuccess, addEventFailure,
   deleteEventStart, deleteEventSuccess, deleteEventFailure,
 } = adminSlice.actions;

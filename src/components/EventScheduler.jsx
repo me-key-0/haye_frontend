@@ -1,26 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../components/CustomButton.component';
 import FormInput from '../components/FormInput.component';
-import eventsData from '../services/events.data';
 import { scheduleEventStart } from '../redux/Slices/eventsSlice';
 
-
-const EventScheduler = () => {
-  const [selectedEvent, setSelectedEvent] = useState(null);
+const EventScheduler = ({ selectedEvent }) => {
   const [scheduleDate, setScheduleDate] = useState('');
-  const [successMessage, setSuccessMessage] = useState(false);  // State to track success message
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const currentUser = useSelector((state) => state.user.currentUser)
-  
+  const [successMessage, setSuccessMessage] = useState(false);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
-  const [events] = useState(eventsData);
 
-  const handleEventChange = (e) => {
-    const event = events.find((event) => event.id === e.target.value);
-    setSelectedEvent(event);
-  };
+  useEffect(() => {
+    if (selectedEvent) {
+      setScheduleDate(selectedEvent.date); // Pre-fill the form with selected event date
+    }
+  }, [selectedEvent]);
 
   const handleScheduleDateChange = (e) => {
     setScheduleDate(e.target.value);
@@ -28,20 +23,15 @@ const EventScheduler = () => {
 
   const handleScheduleSubmit = (e) => {
     e.preventDefault();
-    if (!selectedEvent || !scheduleDate) {
-      return;
-    }
-    
+    if (!selectedEvent || !scheduleDate) return;
+
     const payload = {
       name: selectedEvent.name,
       date: scheduleDate,
-      email: currentUser.user.email, 
+      email: currentUser.user.email,
     };
 
-    
     dispatch(scheduleEventStart(payload));
-
-    // Show success message
     setSuccessMessage(true);
   };
 
@@ -49,23 +39,8 @@ const EventScheduler = () => {
     <div id="event-scheduler" className="mt-8">
       <h3 className="text-xl font-bold mb-4">Event Scheduler</h3>
 
-      <div className="mb-6">
-        <select
-          id="event-select"
-          onChange={handleEventChange}
-          className="block w-full p-2 text-black border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600"
-        >
-          <option value="">Select an Event</option>
-          {(events || []).map((event) => (
-            <option key={event.id} value={event.id}>
-              {event.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {selectedEvent ? (
-        <div>
+      {selectedEvent && (
+        <>
           <p className="text-lg font-semibold">Scheduling for: {selectedEvent.name}</p>
           <div className="mt-4">
             <FormInput
@@ -87,24 +62,14 @@ const EventScheduler = () => {
               )}
             </div>
           </div>
-        </div>
-      ) : (
-        <p className="mt-4"></p>
+        </>
       )}
     </div>
   );
 };
 
 EventScheduler.propTypes = {
-  events: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
-      image: PropTypes.string,
-    })
-  ).isRequired,
+  selectedEvent: PropTypes.object,
 };
 
 export default EventScheduler;

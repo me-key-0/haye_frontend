@@ -4,12 +4,23 @@ import { createSlice } from '@reduxjs/toolkit';
 const eventsSlice = createSlice({
   name: 'events',
   initialState: {
+    allEvents: [],
     scheduledEvents: [],
-    
     status: 'idle',
     error: null,
   },
   reducers: {
+    fetchAllEventsStart(state) {
+      state.status = 'loading';
+    },
+    fetchAllEventsSuccess(state, action) {
+      state.status = 'succeeded';
+      state.events = action.payload;
+    },
+    fetchAllEventsFailure(state, action) {
+      state.status = 'failed';
+      state.error = action.payload;
+    },
     scheduleEventStart: (state) => {
         state.status = 'loading';
     },
@@ -25,7 +36,7 @@ const eventsSlice = createSlice({
         state.status = 'loading' ;
     },
     getScheduledEventsSuccess: (state, action) => {
-     //  state.scheduledEvents = action.payload;
+     // state.scheduledEvents = action.payload;
     },
     getScheduledEventsFailure: (state, action) => {
       state.error = action.payload;
@@ -35,13 +46,9 @@ const eventsSlice = createSlice({
 });
 
 export const {
-  scheduleEventSuccess,
-  scheduleEventStart,
-  scheduleEventFailure,
-getScheduledEventsStart,
-  getScheduledEventsSuccess,
-  getScheduledEventsFailure,
-  addNotification,
+  scheduleEventSuccess, scheduleEventStart, scheduleEventFailure,
+  getScheduledEventsStart, getScheduledEventsSuccess, getScheduledEventsFailure,
+  fetchAllEventsStart, fetchAllEventsSuccess, fetchAllEventsFailure,
 } = eventsSlice.actions;
 
 export default eventsSlice.reducer;

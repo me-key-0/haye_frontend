@@ -1,27 +1,27 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import {
-  fetchPlacesStart, fetchPlacesSuccess, fetchPlacesFailure,
+  fetchAllUsersStart, fetchAllUsersSuccess, fetchAllUsersFailure,
   addPlaceStart, addPlaceSuccess, addPlaceFailure,
   deletePlaceStart, deletePlaceSuccess, deletePlaceFailure,
   updatePlaceStart, updatePlaceSuccess, updatePlaceFailure, 
   updateEventStart, updateEventSuccess, updateEventFailure,
-  fetchEventsStart, fetchEventsSuccess, fetchEventsFailure,
   addEventStart, addEventSuccess, addEventFailure,
   deleteEventStart, deleteEventSuccess, deleteEventFailure,
 } from '../Slices/adminSlice';
 import { 
-  fetchAllPlaces, addPlace, deletePlace,updatePlace,
-  fetchAllEvents, addEvent, deleteEvent,updateEvent
+  fetchAllUsers as fetchAllUsersApi, addPlace, deletePlace,updatePlace,
+   addEvent, deleteEvent,updateEvent
 } from '../../services/api/adminApi'
 
-function* fetchPlaces() {
+function* fetchAllUsers() {
   try {
-    const places = yield call(fetchAllPlaces);
-    yield put(fetchPlacesSuccess(places));
+    const users = yield call(fetchAllUsersApi);
+    yield put(fetchAllUsersSuccess(users));
   } catch (error) {
-    yield put(fetchPlacesFailure(error.toString()));
+    yield put(fetchAllUsersFailure(error.toString()));
   }
 }
+
 
 function* addPlaceSaga(action) {
   try {
@@ -41,14 +41,6 @@ function* deletePlaceSaga(action) {
   }
 }
 
-function* fetchEvents() {
-  try {
-    const events = yield call(fetchAllEvents);
-    yield put(fetchEventsSuccess(events));
-  } catch (error) {
-    yield put(fetchEventsFailure(error.toString()));
-  }
-}
 
 function* addEventSaga(action) {
   try {
@@ -91,12 +83,12 @@ function* updateEventSaga(action) {
 
 
 export function* adminSaga() {
-  yield takeEvery(fetchPlacesStart.type, fetchPlaces);
+  
+  yield takeEvery(fetchAllUsersStart.type, fetchAllUsers);
   yield takeEvery(addPlaceStart.type, addPlaceSaga);
   yield takeEvery(deletePlaceStart.type, deletePlaceSaga);
   yield takeEvery(updateEventStart.type, updateEventSaga);
   yield takeEvery(updatePlaceStart.type, updatePlaceSaga);
-  yield takeEvery(fetchEventsStart.type, fetchEvents);
   yield takeEvery(addEventStart.type, addEventSaga);
   yield takeEvery(deleteEventStart.type, deleteEventSaga);
 

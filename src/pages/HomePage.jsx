@@ -11,8 +11,8 @@ const HomePage = () => {
     dispatch(HomeRequest());
   }, [dispatch]);
 
-  const places = useSelector((state) => state.places.allPlaces || { explore: [], event: [], fav: '' });
-  console.log(places)
+  const places = useSelector((state) => state.places.allPlaces || { explore: [], event: [] });
+  
 
   const explorePlaces = places.explore || [];
   const eventPlaces = places.event || [];
