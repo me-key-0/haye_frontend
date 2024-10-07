@@ -26,7 +26,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRa
   };
 
   const handleDropdownToggle = () => {
-    setFilterOpen(!filterOpen);
+    setFilterOpen(prevState => !prevState);
   };
 
   const handleOutsideClick = (event) => {
@@ -113,11 +113,9 @@ const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRa
                 className="block w-full mt-1 py-2 pl-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base bg-white"
               >
                 <option value="">Any</option>
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <option key={star} value={star}>{star} Star{star > 1 ? 's' : ''}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -129,13 +127,13 @@ const SearchBar = ({ searchQuery, setSearchQuery, price, setPrice, rating, setRa
 
 // Define PropTypes for SearchBar
 SearchBar.propTypes = {
-  searchQuery: PropTypes.string,
-  setSearchQuery: PropTypes.func,
-  price: PropTypes.string,
-  setPrice: PropTypes.func,
-  rating: PropTypes.string,
-  setRating: PropTypes.func,
-  type: PropTypes.string,
+  searchQuery: PropTypes.string.isRequired,
+  setSearchQuery: PropTypes.func.isRequired,
+  price: PropTypes.string.isRequired,
+  setPrice: PropTypes.func.isRequired,
+  rating: PropTypes.string.isRequired,
+  setRating: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
   places: PropTypes.array.isRequired,
 };
 

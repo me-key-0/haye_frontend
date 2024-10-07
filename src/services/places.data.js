@@ -1,4 +1,4 @@
-const places = [
+export const places = [
   // Hotels
   {
     id: '1',
@@ -125,4 +125,4 @@ const places = [
   },
 ];
 
-export default places;
+

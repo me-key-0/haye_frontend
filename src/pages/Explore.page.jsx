@@ -4,6 +4,8 @@ import { fetchAllPlacesRequest } from '../redux/Slices/placesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
+import { places as psst } from '../services/places.data'
+
 const ExplorePage = () => {
   const dispatch = useDispatch();
   
@@ -12,7 +14,7 @@ const ExplorePage = () => {
   }, [dispatch]);
 
   const places = useSelector((state) => state.places.allPlaces);
-
+  const pl  = psst.filter((p)=>p.name)
   // Filter places based on categories for different sections
   const trendingPlaces = places.filter((place) => place.category === 'Restaurant');
   const bestDeals = places.filter((place) => place.category === 'Cafe');
@@ -20,7 +22,7 @@ const ExplorePage = () => {
 
     return (
       <div className="pt-20">
-        <SearchBar type="explore" places={places}/>
+        <SearchBar type="explore" places={pl}/>
         
         <ESection title="Trending Places" items={trendingPlaces}  type="place"/>
         <ESection title="Best Deals" items={bestDeals}  type="place"/>

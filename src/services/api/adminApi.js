@@ -2,20 +2,21 @@
 
 import axiosInstance from './axiosInstance';
 
-// Fetch All Places
-export const fetchAllPlaces = async () => {
+export const fetchAllUsers = async () => {
   try {
-    const response = await axiosInstance.get('/admin/places');
+    const response = await axiosInstance.get('/users');
     return response.data;
   } catch (error) {
-    throw new Error('Error fetching places: ' + error.message);
+    throw new Error('Error fetching events: ' + error.message);
   }
 };
+
+// Fetch All Places
 
 // Add New Place
 export const addPlace = async (placeData) => {
   try {
-    const response = await axiosInstance.post('/admin/places', placeData);
+    const response = await axiosInstance.post('/places', placeData);
     return response.data;
   } catch (error) {
     throw new Error('Error adding place: ' + error.message);
@@ -33,26 +34,17 @@ export const deletePlace = async (placeId) => {
 };
 export const updatePlace = async (placeId, updatedPlaceData) => {
     try {
-      const response = await axiosInstance.put(`/admin/places/${placeId}`, updatedPlaceData);
+      const response = await axiosInstance.put(`/places/${placeId}`, updatedPlaceData);
       return response.data; // Assuming the response contains the updated place
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Error updating place');
     }
   };
-// Fetch All Events
-export const fetchAllEvents = async () => {
-  try {
-    const response = await axiosInstance.get('/admin/events');
-    return response.data;
-  } catch (error) {
-    throw new Error('Error fetching events: ' + error.message);
-  }
-};
 
 // Add New Event
 export const addEvent = async (eventData) => {
   try {
-    const response = await axiosInstance.post('/admin/events', eventData);
+    const response = await axiosInstance.post('/events', eventData);
     return response.data;
   } catch (error) {
     throw new Error('Error adding event: ' + error.message);
@@ -62,7 +54,7 @@ export const addEvent = async (eventData) => {
 // Delete Event
 export const deleteEvent = async (eventId) => {
   try {
-    const response = await axiosInstance.delete(`/admin/events/${eventId}`);
+    const response = await axiosInstance.delete(`/events/${eventId}`);
     return response.data;
   } catch (error) {
     throw new Error('Error deleting event: ' + error.message);

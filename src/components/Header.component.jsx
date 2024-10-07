@@ -4,12 +4,12 @@ import { HashLink } from 'react-router-hash-link';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchUserFavoritesStart,
-  fetchScheduledEventsStart,
   fetchUserProfileStart,
   setCurrentUser,
   removeFavorite,
 
 } from '../redux/Slices/userSlice';
+
 import { removePlaceFromFavorite } from '../redux/Slices/placesSlice';
 import { signOutStart } from '../redux/Slices/authSlice';
 
@@ -50,13 +50,8 @@ const Header = React.memo(() => {
     
   };
 
-  const handleFetchFavorites = useCallback(() => {
-    dispatch(fetchUserFavoritesStart());
-  }, [dispatch]);
 
-  const handleFetchScheduledEvents = useCallback(() => {
-    dispatch(fetchScheduledEventsStart());
-  }, [dispatch]);
+
 
   const handleFetchUserProfile = useCallback(() => {
     if (currentUser) {
@@ -103,13 +98,14 @@ const Header = React.memo(() => {
 
   useEffect(() => {
     if (currentUser) {
-
-
+     // dispatch(fetchScheduledEventsStart(currentUser.user.uid));
+    console.log(currentUser)
     const token = localStorage.getItem('accessToken');
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (token && user) {
       dispatch(setCurrentUser({ token, user }));
+      
     }
 
       //handleFetchFavorites();
@@ -119,8 +115,6 @@ const Header = React.memo(() => {
     signOutStatus,
     navigate,
     currentUser,
-    handleFetchFavorites,
-    handleFetchScheduledEvents,
     dispatch,
   ]);
 
@@ -137,7 +131,7 @@ const Header = React.memo(() => {
     <header className="bg-[#FCF8F1] shadow-md fixed top-0 left-0 w-full z-50 flex items-center justify-between h-16 lg:h-20 px-4 sm:px-6 lg:px-8">
       <Link to="/">
         <img
-          src="/assets/Haye_light.svg"
+          src="/assets/Haye_light.png"
           alt="Logo"
           className="w-10 h-10 rounded-full transition-transform duration-300 hover:scale-150"
         />

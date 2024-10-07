@@ -44,7 +44,6 @@ const placesSlice = createSlice({
     },
     HomeSuccess(state, action) {
       state.loading = false;
-      console.log(action.payload)
       state.allPlaces = action.payload;
       
 
